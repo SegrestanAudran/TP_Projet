@@ -7,6 +7,7 @@ package Tp_Projet;
 
 import java.sql.SQLException;
 import java.time.*;
+import java.util.HashMap;
 import java.util.List;
 import javax.sql.DataSource;
 import org.junit.Before;
@@ -22,8 +23,9 @@ import org.junit.Ignore;
 public class DAOTest {
     private DAO myDao;
     private DataSource myDataSource;
-    private LocalDate d1;
-    private LocalDate d2;
+  //  private String d1;
+  //  private String d2;
+    
     @Before
     public void setUp() throws SQLException {
 	myDataSource = DataSourceFactory.getDataSource();
@@ -33,8 +35,14 @@ public class DAOTest {
     
     @Test
     public void testCAPeriode() throws DAOException {
-        d1 = new LocalDate.parse("2011-02-25");
-        d2= new LocalDate.parse("2011-04-25");
+        HashMap<String,Double> tabCAPer = new HashMap<String,Double>();
+        
+        tabCAPer.put("BK", 9750.0);
+        String d1 = "2011-02-25";
+        String d2 = "2011-04-25";
+        assertEquals(tabCAPer.get("BK"),myDao.CAPeriode(d1, d2).get("BK"));
+        
+        
     }
     
 }

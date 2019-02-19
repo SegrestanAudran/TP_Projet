@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
+import java.lang.Object;
 
 public class DataSourceFactory {
         // Pré-chargement du driver, ne devrait pas âtre nécessaire avec des versions plus récentes

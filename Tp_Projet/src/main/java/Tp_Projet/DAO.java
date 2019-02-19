@@ -30,6 +30,14 @@ public class DAO {
 		this.myDataSource = dataSource;
 	}
         
+         /**
+	 *
+	 * @ajoute le une commande
+         * @param 
+         * @param
+	 * @throws DAOException
+	 */
+        
         /**
 	 *
 	 * @return le chiffre d'affaire par catégorie d'article
@@ -37,25 +45,25 @@ public class DAO {
          * @param dateFin la date de fin
 	 * @throws DAOException
 	 */
-        public int CAPeriode(LocalDate dateDebut,LocalDate dateFin) throws DAOException{
+        public HashMap<String,Double> CAPeriode(String dateDebut,String dateFin) throws DAOException{
             
-        int CA = 0;
-        int resultLigne = 0;
+            HashMap<String,Double> result = new HashMap<String,Double>();
         
-        String sql = "SELECT product_id, quantity, shipping_cost,description,purchase_cost  FROM purchase_order INNER JOIN product USING(product_id) WHERE sales_date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE)  ORDER BY product_id";
-        try (   Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
+            String sql = "SELECT  product_code,((CAST(SUM(quantity)as FLOAT ))*(cast(sum(purchase_cost)as decimal))+(cast(sum(shipping_cost) as decimal))) as CA FROM purchase_order INNER JOIN product USING(product_id) INNER JOIN product_code ON product_code.prod_code=PRODUCT.PRODUCT_CODE group by product_code ,sales_date having sales_date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE)";
+        // String sql = "SELECT product_id, quantity, shipping_cost,description,purchase_cost  FROM purchase_order INNER JOIN product USING(product_id) WHERE sales_date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE)  ORDER BY product_id";
+        
+            try (   Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
 			PreparedStatement stmt = connection.prepareStatement(sql)    // On crée un statement préparé pour exécuter une requête paramétrée        
                 ) {
                   
                         // Définir la valeur du paramètre
-			stmt.setObject(1, dateDebut);
-                        stmt.setObject(2, dateFin);
+			stmt.setString(1, dateDebut);
+                        stmt.setString(2, dateFin);
 
 			try(ResultSet rs = stmt.executeQuery()){
                             while (rs.next()) { // On test tous les enregistrements
-                                resultLigne = rs.getInt("quantity")*rs.getInt("purchase_cost")+rs.getInt("shipping_cost");
+                                result.put(rs.getString("PRODUCT_CODE"),rs.getDouble("CA"));
                                 //Completer la liste de client
-                                CA=CA+resultLigne;
 			}
 			
                         }
@@ -64,8 +72,8 @@ public class DAO {
 			throw new DAOException(ex.getMessage());
 		}
         
-                System.out.println(CA);
-                return CA;
+                System.out.println(result);
+                return result;
         }
         
     
