@@ -32,15 +32,39 @@ public class DAOTest {
 	myDao = new DAO(myDataSource);
     }
     
+    //Créer une ligne de commande
+    int order_num = 168;
+    int id_client = 3;
+    int id_produit = 980002;
+    int quantite = 10;
+    float frais = 45;
+    String date_achat = "2019-05-05";
+    String date_envoi = "2019-05-09";
+    String compagnie = "Poney Express";
+    
+    //@Test
+    public void testCreerCommande() throws DAOException {
+        assertEquals(1,myDao.ajoutPurchaseOrder(order_num, id_client,id_produit,quantite,frais,date_achat,date_envoi,compagnie));
+    }
+    // la supprimer
+    @Test
+    public void testSupprimerCommande() throws DAOException {
+        assertEquals(1,myDao.deletePurchaseOrder(166));
+    }
+    //la modifier
+    @Test
+    public void testModifierCommande() throws DAOException {
+       assertEquals(1,myDao.modifierPurchaseOrder(order_num, id_client, id_produit, quantite, frais, date_achat, date_envoi, compagnie));
+    }
     
     @Test
     public void testCAPeriode() throws DAOException {
-        HashMap<String,Double> tabCAPer = new HashMap<String,Double>();
-        
-        tabCAPer.put("BK", 9750.0);
+        HashMap<String,Double> tabCAPer = new HashMap<>();
         String d1 = "2011-02-25";
         String d2 = "2011-04-25";
-        assertEquals(tabCAPer.get("BK"),myDao.CAPeriode(d1, d2).get("BK"));
+        System.out.println(myDao.CAPeriode(d1, d2).get("BK"));
+        tabCAPer.put("BK", 9750.0);
+        assertEquals(9750.0,myDao.CAPeriode(d1, d2).get("BK"),0.1);
         
         
     }

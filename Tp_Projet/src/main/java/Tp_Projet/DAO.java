@@ -32,11 +32,102 @@ public class DAO {
         
          /**
 	 *
-	 * @ajoute le une commande
+	 * @ajoute une commande
          * @param 
          * @param
 	 * @throws DAOException
 	 */
+        public int ajoutPurchaseOrder(int order_num, int id_client, int id_produit, int quantite, float frais, String date_achat, String date_envoi, String compagnie) throws DAOException{
+            // Une requête SQL paramétrée
+		String sql = "INSERT INTO Purchase_Order(Order_num,customer_id,product_id,quantity,shipping_cost, sales_date,shipping_date,freight_company) VALUES(?,?,?,?,?,?,?,?)";
+		try (   Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql);
+                ) {
+                        // Définir la valeur du paramètre
+			stmt.setInt(1, order_num);
+                        stmt.setInt(2, id_client);
+                        stmt.setInt(3, id_produit);
+                        stmt.setInt(4, quantite);
+                        stmt.setFloat(5, frais);
+                        stmt.setString(6, date_achat);
+                        stmt.setString(7, date_envoi);
+                        stmt.setString(8, compagnie);
+                        
+			if ( stmt.executeUpdate() == 0 ) {
+                                throw new DAOException( "Échec de la création de la commande, aucune ligne ajoutée dans la table." );
+                        }
+			return stmt.executeUpdate();
+                        
+
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+        }
+        
+        
+         /**
+	 *
+	 * @ajoute une commande
+         * @param 
+         * @param
+	 * @throws DAOException
+	 */
+        public int modifierPurchaseOrder(int order_num, int id_client, int id_produit, int quantite, float frais, String date_achat, String date_envoi, String compagnie) throws DAOException{
+                       // Une requête SQL paramétrée
+		String sql = "UPDATE Purchase_Order SET customer_id = ?,product_id = ?,quantity = ?,shipping_cost = ?, sales_date = ?,shipping_date = ?,freight_company = ? where Order_num = ? ";
+		try (   Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql);
+                ) {
+                        // Définir la valeur du paramètre
+			//stmt.setInt(1, order_num);
+                        stmt.setInt(1, id_client);
+                        stmt.setInt(2, id_produit);
+                        stmt.setInt(3, quantite);
+                        stmt.setFloat(4, frais);
+                        stmt.setString(5, date_achat);
+                        stmt.setString(6, date_envoi);
+                        stmt.setString(7, compagnie);
+                        stmt.setInt(8, order_num);
+                        
+			if ( stmt.executeUpdate() == 0 ) {
+                                throw new DAOException( "Échec de la modification de la commande, aucune ligne ajoutée dans la table." );
+                        }
+			return stmt.executeUpdate();
+                        
+
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+        }
+        
+        
+        
+        
+	/**
+	 * Detruire un enregistrement dans la table PURCHASE_ORDER
+	 * @param ORDER_NUM la clé de la commande à détruire
+	 * @return le nombre d'enregistrements détruits (1 ou 0 si pas trouvé)
+	 * @throws DAOException
+	 */
+	public int deletePurchaseOrder(int order_num) throws DAOException {
+
+		// Une requête SQL paramétrée
+		String sql = "DELETE FROM PURCHASE_ORDER WHERE ORDER_NUM = ?";
+		try (   Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)
+                ) {
+                        // Définir la valeur du paramètre
+			stmt.setInt(1, order_num);
+			
+			return stmt.executeUpdate();
+
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+	}
         
         /**
 	 *
@@ -47,7 +138,7 @@ public class DAO {
 	 */
         public HashMap<String,Double> CAPeriode(String dateDebut,String dateFin) throws DAOException{
             
-            HashMap<String,Double> result = new HashMap<String,Double>();
+            HashMap<String,Double> result = new HashMap<>();
         
             String sql = "SELECT  product_code,((CAST(SUM(quantity)as FLOAT ))*(cast(sum(purchase_cost)as decimal))+(cast(sum(shipping_cost) as decimal))) as CA FROM purchase_order INNER JOIN product USING(product_id) INNER JOIN product_code ON product_code.prod_code=PRODUCT.PRODUCT_CODE group by product_code ,sales_date having sales_date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE)";
         // String sql = "SELECT product_id, quantity, shipping_cost,description,purchase_cost  FROM purchase_order INNER JOIN product USING(product_id) WHERE sales_date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE)  ORDER BY product_id";
@@ -59,12 +150,18 @@ public class DAO {
                         // Définir la valeur du paramètre
 			stmt.setString(1, dateDebut);
                         stmt.setString(2, dateFin);
-
-			try(ResultSet rs = stmt.executeQuery()){
-                            while (rs.next()) { // On test tous les enregistrements
-                                result.put(rs.getString("PRODUCT_CODE"),rs.getDouble("CA"));
+                       // System.out.println("ça marche ici");
+			try (ResultSet rs = stmt.executeQuery()) {
+                           while (rs.next()) { // Tant qu'il y a des enregistrements
+                                // On récupère les champs nécessaires de l'enregistrement courant
+                                System.out.println("ça marche ici");
+				String product_code = rs.getString("product_code");
+				Double CA = rs.getDouble("CA");
+                                result.put(product_code,CA);
                                 //Completer la liste de client
-			}
+                            }
+
+			
 			
                         }
 		}  catch (SQLException ex) {
