@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.lang.*;
 import static java.lang.System.console;
 import java.time.*;
+import static java.util.Collections.list;
 /**
  *
  * @author manga
@@ -160,9 +161,9 @@ public class DAO {
                                 result.put(product_code,CA);
                                 //Completer la liste de client
                             }
+                           
+                          // System.out.println(result);
 
-			
-			
                         }
 		}  catch (SQLException ex) {
 			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
@@ -173,5 +174,42 @@ public class DAO {
                 return result;
         }
         
+        
+        /**
+	 * Renvoie l'email et l'id du client et le nom
+	 * @param
+	 * @return la un tableau contenu de l'email et l'id
+	 * @throws DAOException
+	 */
+	public List<CustomerEntity> customers() throws DAOException {
+            String sql = "SELECT customer_ID, name, email FROM CUSTOMER";
+              try (   Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
+			PreparedStatement stmt = connection.prepareStatement(sql)    // On crée un statement préparé pour exécuter une requête paramétrée        
+                ) {
+                 List<CustomerEntity> result = new LinkedList<>();
+                  try (ResultSet rs = stmt.executeQuery()) {
+                           while (rs.next()) { // Tant qu'il y a des enregistrements
+                                // On récupère les champs nécessaires de l'enregistrement courant
+                                System.out.println("ça marche ici");
+				int id = rs.getInt("customer_ID");
+				String name = rs.getString("name");
+                                String email = rs.getString("email");
+                                
+                                // On crée l'objet entité
+					CustomerEntity c = new CustomerEntity(id, name, email);
+					// On l'ajoute à la liste des résultats
+					result.add(c);
+                            }
+                  }
+                            return result;
+                           }  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+                           
+                          
+                  
+              
+        }
     
 }
