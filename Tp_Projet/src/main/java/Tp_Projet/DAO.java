@@ -160,9 +160,9 @@ public class DAO {
                                 result.put(product_code,CA);
                                 //Completer la liste de client
                             }
+                           
+                          // System.out.println(result);
 
-			
-			
                         }
 		}  catch (SQLException ex) {
 			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
