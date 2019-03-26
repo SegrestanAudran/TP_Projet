@@ -42,9 +42,11 @@ public class DAOTest {
     String date_envoi = "2019-05-09";
     String compagnie = "Poney Express";
     
+   OrderEntity order = new OrderEntity(order_num, id_client,id_produit,quantite,frais,date_achat,date_envoi,compagnie);
+    
     //@Test
     public void testCreerCommande() throws DAOException {
-        assertEquals(1,myDao.ajoutPurchaseOrder(order_num, id_client,id_produit,quantite,frais,date_achat,date_envoi,compagnie));
+        assertEquals(1,myDao.ajoutPurchaseOrder(order));
     }
     // la supprimer
     @Test
@@ -54,19 +56,29 @@ public class DAOTest {
     //la modifier
     @Test
     public void testModifierCommande() throws DAOException {
-       assertEquals(1,myDao.modifierPurchaseOrder(order_num, id_client, id_produit, quantite, frais, date_achat, date_envoi, compagnie));
+       assertEquals(1,myDao.modifierPurchaseOrder(order));
     }
     
     @Test
-    public void testCAPeriode() throws DAOException {
+    public void testCAParCategorie() throws DAOException {
         //HashMap<String,Double> tabCAPer = new HashMap<>();
         String d1 = "2011-02-25";
         String d2 = "2011-06-25";
-     //   System.out.println(myDao.CAPeriode(d1, d2).get("BK"));
-        //tabCAPer.add( 9750.0);
-        assertEquals(9750.0,myDao.CAPeriode(d1, d2).get("BK"),0.1);
-        
-        
+        assertEquals(9750.0,myDao.CAParCategorie(d1, d2).get("BK"),0.1);
+    }
+    
+     @Test
+    public void testCAParState() throws DAOException {
+        String d1 = "2011-02-25";
+        String d2 = "2011-06-25";
+        assertEquals(865.0,myDao.CAParState(d1, d2).get("GA"),0.1); 
+    }
+    
+    @Test
+    public void testCAParCustomer() throws DAOException {
+        String d1 = "2011-02-25";
+        String d2 = "2011-06-25";
+        assertEquals(9750.0,myDao.CAParCustomer(d1, d2).get("Big Car Parts"),0.1); 
     }
     
 }
