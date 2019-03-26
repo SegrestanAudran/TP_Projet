@@ -6,10 +6,13 @@
 package Tp_Projet_Servlet.Controller;
 
 import Tp_Projet.DAO;
+import Tp_Projet.DAOException;
 import Tp_Projet.DataSourceFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +34,7 @@ public class Log_Controller extends HttpServlet {
         this.dao = new DAO(DataSourceFactory.getDataSource());
     }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+		throws ServletException, IOException, DAOException {
 		// Quelle action a appelé cette servlet ?
 		String action = request.getParameter("action");
 		if (null != action) {
@@ -64,7 +67,7 @@ public class Log_Controller extends HttpServlet {
 		request.getRequestDispatcher(jspView).forward(request, response);
 
 	}
-    private void checkLogin(HttpServletRequest request) {
+    private void checkLogin(HttpServletRequest request) throws DAOException {
 		// Les paramètres transmis dans la requête
 		String loginParam = request.getParameter("loginParam");
 		String passwordParam = request.getParameter("passwordParam");
@@ -75,10 +78,10 @@ public class Log_Controller extends HttpServlet {
 		String adminName = getInitParameter("userName");
                 
                 // Le login/password défini dans la base de données est celui des utilisateurs
-                while(dao.infologin().hasNext()){
-                    String loginUser = dao.infologin();
-                    String passwordUser = dao.infologin();
-                    String userName = dao.infologin();
+                for(int i = 0; i<dao.customers().size();i++){
+                    String loginUser = dao.customers().get(i).getEmail();
+                    String passwordUser = Integer.toString(dao.customers().get(i).getCustomerId());
+                    String userName = dao.customers().get(i).getName();
                     if ((loginUser.equals(loginParam) && (passwordUser.equals(passwordParam)))) {
 			// On a trouvé la combinaison login / password
 			// On stocke l'information dans la session
@@ -121,7 +124,11 @@ public class Log_Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (DAOException ex) {
+            Logger.getLogger(Log_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -135,7 +142,11 @@ public class Log_Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (DAOException ex) {
+            Logger.getLogger(Log_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
