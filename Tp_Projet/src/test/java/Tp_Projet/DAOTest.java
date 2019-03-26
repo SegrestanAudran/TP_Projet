@@ -59,11 +59,11 @@ public class DAOTest {
     
     @Test
     public void testCAPeriode() throws DAOException {
-        HashMap<String,Double> tabCAPer = new HashMap<>();
+        //HashMap<String,Double> tabCAPer = new HashMap<>();
         String d1 = "2011-02-25";
-        String d2 = "2011-04-25";
-        System.out.println(myDao.CAPeriode(d1, d2).get("BK"));
-        tabCAPer.put("BK", 9750.0);
+        String d2 = "2011-06-25";
+     //   System.out.println(myDao.CAPeriode(d1, d2).get("BK"));
+        //tabCAPer.add( 9750.0);
         assertEquals(9750.0,myDao.CAPeriode(d1, d2).get("BK"),0.1);
         
         

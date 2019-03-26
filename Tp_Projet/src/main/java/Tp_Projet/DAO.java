@@ -15,6 +15,7 @@ import java.lang.*;
 import static java.lang.System.console;
 import java.time.*;
 import static java.util.Collections.list;
+import javafx.util.Pair;
 /**
  *
  * @author manga
@@ -138,7 +139,8 @@ public class DAO {
 	 * @throws DAOException
 	 */
         public HashMap<String,Double> CAPeriode(String dateDebut,String dateFin) throws DAOException{
-            
+               // List<Pair<String, Double>> list = new ArrayList<Pair<String, Double>>();
+            //List<Double> result = new LinkedList<>(); // Liste vIde
             HashMap<String,Double> result = new HashMap<>();
         
             String sql = "SELECT  product_code,((CAST(SUM(quantity)as FLOAT ))*(cast(sum(purchase_cost)as decimal))+(cast(sum(shipping_cost) as decimal))) as CA FROM purchase_order INNER JOIN product USING(product_id) INNER JOIN product_code ON product_code.prod_code=PRODUCT.PRODUCT_CODE group by product_code ,sales_date having sales_date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE)";
@@ -153,16 +155,26 @@ public class DAO {
                         stmt.setString(2, dateFin);
                        // System.out.println("ça marche ici");
 			try (ResultSet rs = stmt.executeQuery()) {
+                            
+                          // System.out.println("ça marche ici");
                            while (rs.next()) { // Tant qu'il y a des enregistrements
                                 // On récupère les champs nécessaires de l'enregistrement courant
+                                
+                                System.out.println("coucou");
+                                System.out.println(rs.getString("product_code"));
+                                
+                                
                                 System.out.println("ça marche ici");
 				String product_code = rs.getString("product_code");
 				Double CA = rs.getDouble("CA");
-                                result.put(product_code,CA);
+                               // list.add(product_code,CA);
+                                result.put(product_code, CA); 
+                                
+                               // System.out.println(list);
                                 //Completer la liste de client
                             }
                            
-                          // System.out.println(result);
+                         // System.out.println(list);
 
                         }
 		}  catch (SQLException ex) {
@@ -170,7 +182,7 @@ public class DAO {
 			throw new DAOException(ex.getMessage());
 		}
         
-                System.out.println(result);
+              //  System.out.println(result);
                 return result;
         }
         
@@ -190,7 +202,7 @@ public class DAO {
                   try (ResultSet rs = stmt.executeQuery()) {
                            while (rs.next()) { // Tant qu'il y a des enregistrements
                                 // On récupère les champs nécessaires de l'enregistrement courant
-                                System.out.println("ça marche ici");
+                              
 				int id = rs.getInt("customer_ID");
 				String name = rs.getString("name");
                                 String email = rs.getString("email");
