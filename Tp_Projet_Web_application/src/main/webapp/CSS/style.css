@@ -1,0 +1,72 @@
+/* Général ------------------------------------------------------------------------------------- */
+
+body, p, legend, label, input {
+    font: normal 8pt verdana, helvetica;
+	font-family: Montserrat-Bold;
+}
+
+fieldset {
+    padding: 50px;
+    border: 3px #0568CD solid;
+	margin-top: 200px;
+    color: #057269;
+    align-content: center;
+
+}
+
+br{
+    line-height:25px;
+}
+
+
+
+legend {
+    font-weight: bold;
+    color: #0568CD;
+    width: 200px;
+    margin-left: 600px;
+    font-size: 30px;
+}
+
+/* Forms --------------------------------------------------------------------------------------- */
+
+
+
+
+div{
+    text-align: center;
+  
+}
+
+
+
+form input.sansLabel {
+  margin-left: center;
+  font-family: Montserrat-Bold;
+  font-size: 15px;
+  line-height: 1.5;
+  color:#FFFFFF;
+  text-transform: uppercase;
+
+  width: 10%;
+  height: 40px;
+  border-radius: 100px;
+  background: #0568CD;
+
+}
+
+form .requis {
+    color: #c00;
+}
+
+
+.title {
+  font-family: Poppins-Bold;
+  font-size: 24px;
+  color: #333333;
+  line-height: 1.2;
+  text-align: center;
+  width: 100%;
+  display: block;
+  padding-bottom: 54px;
+}
