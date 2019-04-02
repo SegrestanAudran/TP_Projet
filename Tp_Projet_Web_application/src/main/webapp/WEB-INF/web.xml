@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>LoginController</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
+        <servlet-name>LoginController1</servlet-name>
+        <servlet-class>controller.LoginController1</servlet-class>
         <!-- Les identifiants pour se connecter -->
         <init-param>
-            <param-name>login</param-name>
-            <param-value>untel</param-value>
+            <param-name>adminL</param-name>
+            <param-value>alexandra</param-value>
         </init-param>
         <init-param>
-            <param-name>password</param-name>
-            <param-value>ABCD</param-value>
+            <param-name>adminP</param-name>
+            <param-value>alexandra</param-value>
         </init-param>
         <init-param>
             <param-name>userName</param-name>
@@ -19,8 +19,8 @@
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>LoginController</servlet-name>
-        <url-pattern>/LoginController</url-pattern>
+        <servlet-name>LoginController1</servlet-name>
+        <url-pattern>/LoginController1</url-pattern>
     </servlet-mapping>
     <!-- Un filtre qui vérifie que l'utilisateur est connecté -->
     <filter>
@@ -48,6 +48,6 @@
     </session-config>
     
     <welcome-file-list>
-        <welcome-file>LoginController</welcome-file>
+        <welcome-file>LoginController1</welcome-file>
     </welcome-file-list>
 </web-app>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tp_Projet_Servlet.Controller;
+package Controller;
 
 import Tp_Projet.DAO;
 import Tp_Projet.DAOException;
@@ -25,12 +25,12 @@ import javax.servlet.http.HttpSession;
  * @author manga
  */
 @WebServlet(name = "Log_Controller", urlPatterns = {"/Log_Controller"})
-public class Log_Controller extends HttpServlet {
+public class LoginController extends HttpServlet {
 
     
     DAO dao;
 
-    public Log_Controller() throws SQLException {
+    public LoginController() throws SQLException {
         this.dao = new DAO(DataSourceFactory.getDataSource());
     }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -56,9 +56,9 @@ public class Log_Controller extends HttpServlet {
 			// On choisit la page de login
 			jspView = "login.jsp";
 
-		}else if (userName == "Mr. Super-User"){ // L'administrateur est connecté
+		}else if (userName == getInitParameter("userName")){ // L'administrateur est connecté
                         // On choisit la page d'affichage de l'administrateur
-			jspView = "afficheAdmin.jsp";
+			jspView = "affiche.jsp";
                 }else { // L'utilisateur est connecté
 			// On choisit la page d'affichage
 			jspView = "affiche.jsp";
@@ -73,30 +73,46 @@ public class Log_Controller extends HttpServlet {
 		String passwordParam = request.getParameter("passwordParam");
 
 		// Le login/password défini dans web.xml est celui de la connexion en administrateur
-		String loginAdmin = getInitParameter("login");
-		String passwordAdmin = getInitParameter("password");
-		String adminName = getInitParameter("userName");
-                
+		String loginAdmin = getInitParameter("adminL");
+                if(loginAdmin == null)
+                   request.setAttribute("errorMessage","c'est nul" );
+
+		String passwordAdmin = getInitParameter("adminP");
+//                String loginAdmin = "untel";
+//		String passwordAdmin = "ABCD";
+		//String adminName = getInitParameter("userName");
+                String adminName = "Coucou";
+                //System.out.print("Coucou ici");
                 // Le login/password défini dans la base de données est celui des utilisateurs
-                for(int i = 0; i<dao.customers().size();i++){
-                    String loginUser = dao.customers().get(i).getEmail();
-                    String passwordUser = Integer.toString(dao.customers().get(i).getCustomerId());
-                    String userName = dao.customers().get(i).getName();
+                //String loginUser = "Bonjour";
+                //String passwordUser = "Salut";
+                //String userName = "C'est moi";
+                //System.out.print("Coucou ici");
+//                if ((loginAdmin.equals(loginParam) && (passwordAdmin.equals(passwordParam)))) {
+//			// On a trouvé la combinaison login / password
+//			// On stocke l'information dans la session
+//                        System.out.print("Coucou là encore");
+//			HttpSession session = request.getSession(true); // démarre la session
+//			session.setAttribute("userName", adminName);
+//		} 
+		
+                /*for(int i = 0; i<dao.customers().size();i++){
+                    //loginUser = dao.customers().get(i).getEmail();
+                    //passwordUser = Integer.toString(dao.customers().get(i).getCustomerId());
+                    //userName = dao.customers().get(i).getName();
+                    System.out.print("Coucou par là");
                     if ((loginUser.equals(loginParam) && (passwordUser.equals(passwordParam)))) {
 			// On a trouvé la combinaison login / password
 			// On stocke l'information dans la session
+                        System.out.print("Coucou là");
 			HttpSession session = request.getSession(true); // démarre la session
 			session.setAttribute("userName", userName);
                     }
-                }
-		if ((loginAdmin.equals(loginParam) && (passwordAdmin.equals(passwordParam)))) {
-			// On a trouvé la combinaison login / password
-			// On stocke l'information dans la session
-			HttpSession session = request.getSession(true); // démarre la session
-			session.setAttribute("userName", adminName);
-		} else { // On positionne un message d'erreur pour l'afficher dans la JSP
-			request.setAttribute("errorMessage", "Login/Password incorrect");
-		}
+                }*/
+                // On positionne un message d'erreur pour l'afficher dans la JSP
+		//request.setAttribute("errorMessage","erreur" );
+                
+		
 	}
 
 	private void doLogout(HttpServletRequest request) {
@@ -127,7 +143,7 @@ public class Log_Controller extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
-            Logger.getLogger(Log_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -145,7 +161,7 @@ public class Log_Controller extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
-            Logger.getLogger(Log_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
