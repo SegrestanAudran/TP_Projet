@@ -48,6 +48,6 @@
     </session-config>
     
     <welcome-file-list>
-        <welcome-file>LoginController</welcome-file>
+        <welcome-file>Log_Controller</welcome-file>
     </welcome-file-list>
 </web-app>

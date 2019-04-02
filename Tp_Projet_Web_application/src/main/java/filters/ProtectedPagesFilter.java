@@ -1,4 +1,4 @@
-package Tp_Projet_Servlet.Filters;
+package filters;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class Filtre_pages implements Filter {
+public class ProtectedPagesFilter implements Filter {
 
 	/**
 	 *

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tp_Projet_Servlet.Controller;
+package Controller;
 
 import Tp_Projet.DAO;
 import Tp_Projet.DAOException;
@@ -58,7 +58,7 @@ public class Log_Controller extends HttpServlet {
 
 		}else if (userName == "Mr. Super-User"){ // L'administrateur est connecté
                         // On choisit la page d'affichage de l'administrateur
-			jspView = "afficheAdmin.jsp";
+			jspView = "affiche.jsp";
                 }else { // L'utilisateur est connecté
 			// On choisit la page d'affichage
 			jspView = "affiche.jsp";
