@@ -96,10 +96,13 @@ public class LoginController extends HttpServlet {
 			HttpSession session = request.getSession(true); // démarre la session
 			session.setAttribute("userName", adminName);
 		} 
-		/*
-                if(dao.findEmailCustomer(loginParam)){
+		
+                if(dao.findCustomers(loginParam) != null){
                     loginUser = loginParam;
-                    
+                    System.out.print("Hello !");
+                    //passwordUser = String.valueOf(dao.findEmailCustomer(loginUser).get(loginUser));
+                    passwordUser = String.valueOf(dao.findCustomers(loginUser).get(0).getCustomerId());
+                    userName = dao.findCustomers(loginUser).get(0).getName();
                     if ((loginUser.equals(loginParam) && (passwordUser.equals(passwordParam)))) {
 			// On a trouvé la combinaison login / password
 			// On stocke l'information dans la session
@@ -110,7 +113,7 @@ public class LoginController extends HttpServlet {
                 }
                 // On positionne un message d'erreur pour l'afficher dans la JSP
 		//request.setAttribute("errorMessage","erreur" );
-               */ 
+               
 		
 	}
 
