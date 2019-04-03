@@ -1,30 +1,34 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
-        <title>Inscription</title>
-        <link type="text/css" rel="stylesheet" href="form.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Connexion</title>
+        <%--<link type="text/css" rel="stylesheet" href="form.css" /> --%>
     </head>
     <body>
-	<div>
-		<fieldset>
-				<form method="post" action="inscription">    
+        <div>
+            <fieldset>
                 <legend>Connexion</legend>
-					<span class="title">
-						Vous pouvez vous connecter via ce formulaire.</span>
+                <form action="<c:url value="inscription" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
 
-                <label for="email">Adresse email <span class="requis">*</span></label>
-                <input type="text" id="email" name="email" value="" size="20" maxlength="60" />
-                <br/>
+                    <%-- <span class="title">Vous pouvez vous connecter via ce formulaire.</span> --%>
 
-                <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
-                <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
-                <br />
+                    <label for="email">Adresse email <span class="requis">*</span></label>
+                    <input type='text' id='email' name='email' value="" size='20'  maxlength="60" />
+                    <br>
 
-                <input type="submit" value="Connexion" class="sansLabel" />
-                <br />
-				</form>
-			</fieldset>
-		</div>
+                    <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
+                    <input type='password' id='motdepasse' name='motdepasse' value="" size="20" maxlength="20" />
+                    <br>
+
+                    <input type="submit" value="Connexion" class="sansLabel" />
+                    <br>
+                </form>
+            </fieldset>
+        </div>
     </body>
 </html>

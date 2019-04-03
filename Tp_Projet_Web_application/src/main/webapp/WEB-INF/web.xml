@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>LoginController1</servlet-name>
-        <servlet-class>controller.LoginController1</servlet-class>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
         <!-- Les identifiants pour se connecter -->
         <init-param>
             <param-name>adminL</param-name>
@@ -19,14 +19,14 @@
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>LoginController1</servlet-name>
-        <url-pattern>/LoginController1</url-pattern>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/LoginController</url-pattern>
     </servlet-mapping>
     <!-- Un filtre qui vérifie que l'utilisateur est connecté -->
     <filter>
         <filter-name>ProtectedPagesFilter</filter-name>
         <filter-class>filters.ProtectedPagesFilter</filter-class>
-    </filter>
+    </filter> 
     <filter-mapping>
         <filter-name>ProtectedPagesFilter</filter-name>
         <url-pattern>/protected/*</url-pattern>
@@ -48,6 +48,6 @@
     </session-config>
     
     <welcome-file-list>
-        <welcome-file>LoginController1</welcome-file>
+        <welcome-file>LoginController</welcome-file>
     </welcome-file-list>
 </web-app>
