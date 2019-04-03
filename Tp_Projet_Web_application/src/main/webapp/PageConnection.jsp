@@ -7,13 +7,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Connexion</title>
-        <%--<link type="text/css" rel="stylesheet" href="form.css" /> --%>
+        <link type="text/css" rel="stylesheet" href="CSS\style.css" />
     </head>
     <body>
         <div>
             <fieldset>
                 <legend>Connexion</legend>
-                <form action="<c:url value="inscription" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
+                <form action="<c:url value="controller.LoginController" />" method="post"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
 
                     <%-- <span class="title">Vous pouvez vous connecter via ce formulaire.</span> --%>
 

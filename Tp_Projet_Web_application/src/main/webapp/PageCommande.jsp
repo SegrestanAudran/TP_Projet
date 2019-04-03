@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
         <meta charset="utf-8" />
         <title>Commandes</title>
-        <link type="text/css" rel="stylesheet" href="form.css" />
+        <link type="text/css" rel="stylesheet" href="CSS\tableformat.css" />
     </head>
 	<STYLE>A {text-decoration: none; color: black;} </STYLE>
     <body>
@@ -19,7 +21,7 @@
 					
 				<td> Numero de commande </td>
 				<td> Produit </td>
-				<td> Quantité </td>
+				<td> QuantitÃ© </td>
 				<td> Prix </td>
 				<td> Modifier </td>
 				<td> Suprimmer </td>
