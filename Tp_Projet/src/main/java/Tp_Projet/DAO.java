@@ -252,14 +252,15 @@ public class DAO {
      * @return la un tableau contenu de l'email et l'id
      * @throws DAOException
      */
-    public List<CustomerEntity> customers() throws DAOException {
-        String sql = "SELECT customer_ID, name, email FROM CUSTOMER";
+    public List<CustomerEntity> findCustomers(String email_user) throws DAOException {
+        String sql = "SELECT customer_ID, name, email FROM CUSTOMER WHERE email =?";
         try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
                 PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
                 ) {
             List<CustomerEntity> result = new LinkedList<>();
+            stmt.setString(1, email_user);
             try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) { // Tant qu'il y a des enregistrements
+                if (rs.next()) { // Tant qu'il y a des enregistrements
                     // On récupère les champs nécessaires de l'enregistrement courant
 
                     int id = rs.getInt("customer_ID");
@@ -322,5 +323,37 @@ public class DAO {
             throw new DAOException(ex.getMessage());
         }
     }
+    
+    
+    /**
+     * Renvoyer true si l'email en parametre existe dans la base de données
+     *
+     * @param email repr&sente l'email du client
+     * @return true si l'amail est trouvé ou false si pas trouvé
+     * @throws DAOException
+     */
+    /*
+    public HashMap<String,Integer> findEmailCustomer(String email_user) throws DAOException {
+
+        // Une requête SQL paramétrée
+        String sql = "SELECT email,customer_id FROM CUSTOMER WHERE email=?";
+        HashMap<String,Integer> result = null;
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Définir la valeur du paramètre
+            stmt.setString(1, email_user);
+           ResultSet rs = stmt.executeQuery();
+			if(rs.next()) { //soit il y a une réponse soit on passe pas par cette boucle
+				result.put(rs.getString("email"),rs.getInt("customer_id"));
+			}
+		
+		return result;
+
+        } catch (SQLException ex) {
+            Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+            throw new DAOException(ex.getMessage());
+        }
+    }
+*/
 
 }
