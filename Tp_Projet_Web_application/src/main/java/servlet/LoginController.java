@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package servlet;
 
 import Tp_Projet.DAO;
 import Tp_Projet.DAOException;
@@ -51,6 +51,7 @@ public class LoginController extends HttpServlet {
 		// Est-ce que l'utilisateur est connecté ?
 		// On cherche l'attribut userName dans la session
 		String userName = findUserInSession(request);
+                System.out.print(userName);
 		String jspView;
 		if (null == userName) { // L'utilisateur n'est pas connecté
 			// On choisit la page de login
@@ -74,8 +75,8 @@ public class LoginController extends HttpServlet {
 
 		// Le login/password défini dans web.xml est celui de la connexion en administrateur
 		String loginAdmin = getInitParameter("adminL");
-                if(loginAdmin == null)
-                   request.setAttribute("errorMessage","c'est nul" );
+                //if(loginAdmin == null)
+                //   request.setAttribute("errorMessage","c'est nul" );
 
 		String passwordAdmin = getInitParameter("adminP");
 //                String loginAdmin = "untel";
@@ -95,12 +96,10 @@ public class LoginController extends HttpServlet {
 			HttpSession session = request.getSession(true); // démarre la session
 			session.setAttribute("userName", adminName);
 		} 
-		
-                for(int i = 0; i<dao.customers().size();i++){
-                    loginUser = dao.customers().get(i).getEmail();
-                    passwordUser = Integer.toString(dao.customers().get(i).getCustomerId());
-                    userName = dao.customers().get(i).getName();
-                    System.out.print("Coucou par là");
+		/*
+                if(dao.findEmailCustomer(loginParam)){
+                    loginUser = loginParam;
+                    
                     if ((loginUser.equals(loginParam) && (passwordUser.equals(passwordParam)))) {
 			// On a trouvé la combinaison login / password
 			// On stocke l'information dans la session
@@ -111,7 +110,7 @@ public class LoginController extends HttpServlet {
                 }
                 // On positionne un message d'erreur pour l'afficher dans la JSP
 		//request.setAttribute("errorMessage","erreur" );
-                
+               */ 
 		
 	}
 

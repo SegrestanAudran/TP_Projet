@@ -2,7 +2,7 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>LoginController</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
+        <servlet-class>servlet.LoginController</servlet-class>
         <!-- Les identifiants pour se connecter -->
         <init-param>
             <param-name>adminL</param-name>
@@ -17,7 +17,6 @@
             <param-value>Mr. Super-User</param-value>
         </init-param>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -26,19 +25,17 @@
     <filter>
         <filter-name>ProtectedPagesFilter</filter-name>
         <filter-class>filters.ProtectedPagesFilter</filter-class>
-    </filter> 
+    </filter>
     <filter-mapping>
         <filter-name>ProtectedPagesFilter</filter-name>
         <url-pattern>/protected/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
-
     <!-- Un listener qui compte le nombre d'utilisateurs connectés à l'application -->
     <listener>
         <description>Counting connected users</description>
         <listener-class>listeners.CountingUsers</listener-class>
     </listener>
-    
     <!-- Contrôle le temps au bout duquel une session inactive est détruite automatiquement -->
     <session-config>
         <!-- Un temps volontairement court : 1 minute -->
@@ -46,7 +43,6 @@
             1
         </session-timeout>
     </session-config>
-    
     <welcome-file-list>
         <welcome-file>LoginController</welcome-file>
     </welcome-file-list>

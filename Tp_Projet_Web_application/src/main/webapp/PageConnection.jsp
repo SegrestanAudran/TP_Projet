@@ -13,19 +13,19 @@
         <div>
             <fieldset>
                 <legend>Connexion</legend>
-                <form action="<c:url value="controller.LoginController" />" method="post"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
+                <form action="<c:url value="LoginController" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
 
                     <%-- <span class="title">Vous pouvez vous connecter via ce formulaire.</span> --%>
 
                     <label for="email">Adresse email <span class="requis">*</span></label>
-                    <input type='text' id='email' name='email' value="" size='20'  maxlength="60" />
+                    <input id='email' name='loginParam' value="" size='20'  maxlength="60" />
                     <br>
 
                     <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
-                    <input type='password' id='motdepasse' name='motdepasse' value="" size="20" maxlength="20" />
+                    <input type='password' id='motdepasse' name='passwordParam' value="" size="20" maxlength="20" />
                     <br>
 
-                    <input type="submit" value="Connexion" class="sansLabel" />
+                    <input type="submit" name="action" value="login" class="sansLabel" />
                     <br>
                 </form>
             </fieldset>
