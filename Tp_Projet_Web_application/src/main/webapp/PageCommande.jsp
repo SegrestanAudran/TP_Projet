@@ -27,15 +27,17 @@
 				<td> Suprimmer </td>
 				
 			</tr> 
-			<tr>
-			<td> 1 </td>
-			<td>  </td>
-			<td>  </td>
-			<td>  </td>
-			<td> <input type="submit" value="Modifier" class="secondbouton" /> </td>
-			<td> <input type="submit" value="Supprimer" class="thirdbouton" /> </td>
-					</tr>
-			<tr> 
+                        <% for (OrderEntity v :Commande> {>
+                            out.print("<tr>");
+                                out.print("<td> commande.getNum() </td>");
+                                out.print("<td> v.getNumero() </td>");
+                                out.print("<td> v.getProduit() </td>");
+                                out.print("<td> v.getQuantite()  </td>");
+                                out.print("<td> <input type='submit' value='Modifier' class='secondbouton' /> </td>");
+                                out.print("<td> <input type='submit' value='Supprimer' class='thirdbouton' /> </td>");
+                            out.print("</tr>");
+                        <% } %>
+<!--			<tr> 
 			<td> 2 </td>
 			<td>  </td>
 			<td>  </td>
@@ -43,7 +45,7 @@
 			<td> <input type="submit" value="Modifier" class="secondbouton" /> </td>
 			<td> <input type="submit" value="Supprimer" class="thirdbouton" /> </td>
 			</tr>		
-			
+			-->
 		</table> 
 		
 
