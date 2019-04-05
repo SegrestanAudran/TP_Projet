@@ -1,3 +1,4 @@
+<%@page import="Tp_Projet.OrderEntity"%>
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -15,6 +16,8 @@
 				<li class="a2"><a href=""> Votre compte </a></li>
 				<li class="a2"><a href=""> Deconnection </a></li>
 	<h1> Mes commandes </h1>
+        ${userName}
+        <form action="<c:url value="CommandController" />" method="POST">
 	<input type="submit" value="Ajouter une commande" class="firstbouton" />
 		<table> 
 			<tr> 
@@ -27,16 +30,17 @@
 				<td> Suprimmer </td>
 				
 			</tr> 
-                        <% for (OrderEntity v :Commande> {>
+                       
+                        <c:forEach var="Cmd" items="${Commande}" >
                             out.print("<tr>");
-                                out.print("<td> commande.getNum() </td>");
-                                out.print("<td> v.getNumero() </td>");
-                                out.print("<td> v.getProduit() </td>");
-                                out.print("<td> v.getQuantite()  </td>");
+                                out.print("<td> ${Cmd.getOrder_num()} </td>");
+                                out.print("<td> ${Cmd.getId_produit()} </td>");
+                                out.print("<td> ${Cmd.getQuantite()} </td>");
+                                out.print("<td> ${Cmd.getFrais()}  </td>");
                                 out.print("<td> <input type='submit' value='Modifier' class='secondbouton' /> </td>");
                                 out.print("<td> <input type='submit' value='Supprimer' class='thirdbouton' /> </td>");
                             out.print("</tr>");
-                        <% } %>
+                        </c:forEach>
 <!--			<tr> 
 			<td> 2 </td>
 			<td>  </td>

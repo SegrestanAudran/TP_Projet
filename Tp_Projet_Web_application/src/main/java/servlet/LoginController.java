@@ -67,7 +67,7 @@ public class LoginController extends HttpServlet {
             jspView = "PageCommande.jsp";
         }
         // On va vers la page choisie
-        request.getRequestDispatcher(jspView).forward(request, response);
+        request.getRequestDispatcher("/CommandController").forward(request, response);
 
     }
 
