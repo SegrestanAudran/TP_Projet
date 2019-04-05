@@ -13,7 +13,7 @@
         <div>
             <fieldset>
                 <legend>Connexion</legend>
-                <form action="<c:url value="LoginController" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
+                <form action="<c:url value="CommandController" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
 
                     <%-- <span class="title">Vous pouvez vous connecter via ce formulaire.</span> --%>
 
