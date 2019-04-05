@@ -32,14 +32,14 @@
 			</tr> 
                        
                         <c:forEach var="Cmd" items="${Commande}" >
-                            out.print("<tr>");
-                                out.print("<td> ${Cmd.getOrder_num()} </td>");
-                                out.print("<td> ${Cmd.getId_produit()} </td>");
-                                out.print("<td> ${Cmd.getQuantite()} </td>");
-                                out.print("<td> ${Cmd.getFrais()}  </td>");
-                                out.print("<td> <input type='submit' value='Modifier' class='secondbouton' /> </td>");
-                                out.print("<td> <input type='submit' value='Supprimer' class='thirdbouton' /> </td>");
-                            out.print("</tr>");
+                            <tr>
+                                <td> ${Cmd.getOrder_num()}</td>
+                                <td> ${Cmd.getId_produit()}</td>
+                                <td> ${Cmd.getQuantite()}</td>
+                                <td> ${Cmd.getFrais()}</td>
+                                <td> <input type='submit' value='Modifier' class='secondbouton' /> </td>
+                                <td> <input type='submit' value='Supprimer' class='thirdbouton' /> </td>
+                            </tr>
                         </c:forEach>
 <!--			<tr> 
 			<td> 2 </td>
