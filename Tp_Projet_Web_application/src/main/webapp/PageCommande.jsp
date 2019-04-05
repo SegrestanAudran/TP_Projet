@@ -26,6 +26,8 @@
 				<td> Produit </td>
 				<td> Quantité </td>
 				<td> Prix </td>
+                                <td> Date d'achat</td>
+                                <td> Date d'envoie</td>
 				<td> Modifier </td>
 				<td> Suprimmer </td>
 				
@@ -37,19 +39,12 @@
                                 <td> ${Cmd.getId_produit()}</td>
                                 <td> ${Cmd.getQuantite()}</td>
                                 <td> ${Cmd.getFrais()}</td>
+                                <td> ${Cmd.getDate_achat()}</td>
+                                <td> ${Cmd.getDate_envoi()}</td>
                                 <td> <input type='submit' value='Modifier' class='secondbouton' /> </td>
                                 <td> <input type='submit' value='Supprimer' class='thirdbouton' /> </td>
                             </tr>
                         </c:forEach>
-<!--			<tr> 
-			<td> 2 </td>
-			<td>  </td>
-			<td>  </td>
-			<td>  </td>
-			<td> <input type="submit" value="Modifier" class="secondbouton" /> </td>
-			<td> <input type="submit" value="Supprimer" class="thirdbouton" /> </td>
-			</tr>		
-			-->
 		</table> 
 		
 
