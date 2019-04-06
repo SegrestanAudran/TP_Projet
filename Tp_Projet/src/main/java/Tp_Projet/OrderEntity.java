@@ -25,6 +25,7 @@ public class OrderEntity {
         this.id_client = id_client;
         this.id_produit = id_produit;
         this.quantite = quantite;
+        this.frais = frais;
         this.date_achat = date_achat;
         this.date_envoi = date_envoi;
         this.compagnie = compagnie;

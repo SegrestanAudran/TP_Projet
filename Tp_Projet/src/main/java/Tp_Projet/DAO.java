@@ -281,8 +281,7 @@ public class DAO {
 
     }
     
-    
-     /**
+    /**
      * Renvoie tous les commandes d'un client donné
      *
      * @param l'id du client
@@ -290,7 +289,7 @@ public class DAO {
      * @throws DAOException
      */
     public List<OrderEntity> purchaseOrderPourUnClient(int id) throws DAOException {
-        String sql = "SELECT order_num, customer_id, product_id, quantity,shipping_cost, sales_date, shipping_date,freight_company FROM PURCHASE_ORDER WHERE CUSTOMER_ID = ?";
+        String sql = "SELECT order_num, customer_id, product_id, quantity,shipping_cost, sales_date, shipping_date,freight_company FROM PURCHASE_ORDER WHERE customer_id = ?";
         try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
                 PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
                 ) {
@@ -303,7 +302,7 @@ public class DAO {
                 while (rs.next()) { // Tant qu'il y a des enregistrements
                     // On récupère les champs nécessaires de l'enregistrement courant
                      int order = rs.getInt("order_num");
-                   // int id = rs.getInt("customer_ID");
+                 
                     int product_id = rs.getInt("product_id");
                     int quantity = rs.getInt("quantity");
                     float shipping_cost = rs.getFloat("shipping_cost");
@@ -312,9 +311,39 @@ public class DAO {
                     String freight_company = rs.getString("freight_company");
                     
                     // On crée l'objet entité
-                    OrderEntity c = new OrderEntity(id, order, product_id,quantity,shipping_cost,sales_date,shipping_date,freight_company);
+                    OrderEntity c = new OrderEntity(order,id, product_id,quantity,shipping_cost,sales_date,shipping_date,freight_company);
                     // On l'ajoute à la liste des résultats
                     result.add(c);
+                }
+            }
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+            throw new DAOException(ex.getMessage());
+        }
+    }
+    
+    
+     /**
+     * Renvoie les id's et les description des produits
+     * @return la liste des ids et descriptions des produits
+     * @throws DAOException
+     */
+    public HashMap<Integer,String> produits() throws DAOException {
+        String sql = "SELECT PRODUCT_ID, DESCRIPTION DISCTINCT FROM PRODUCT ";
+        try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
+                PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
+                ) {
+            
+            HashMap<Integer,String> result = new HashMap<Integer,String>();
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) { // Tant qu'il y a des enregistrements
+                    // On récupère les champs nécessaires de l'enregistrement courant
+                    int product_id = rs.getInt("PRODUCT_ID");
+                    String product_name = rs.getString("DESCRIPTION");
+                    
+                    // On l'ajoute à la liste des résultats
+                    result.put(product_id,product_name);
                 }
             }
             return result;
