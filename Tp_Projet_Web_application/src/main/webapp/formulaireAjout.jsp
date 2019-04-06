@@ -13,21 +13,20 @@
     </head>
     <body>
         <h1>Ajouter une commande</h1>
-        
+
         <form method="post" action="traitement">
             <label for="name_product">Choisir le produit :</label>
             <select  name="name_product" id="name_product">
-                <c:forEach var="Pr" items="${Produit}" >
-                     out.print("<option id=${Pr.get()} > ${Cmd.getOrder_num()} </option>");
-                    
-                <option></option>
-                
+                <c:forEach var="Cmd" items="${NouvelleCommande}" >
+                    <option id=${Cmd.product_id()}> ${Cmd.getproduct_name()} </option>
                 </c:forEach>
             </select><br>
-                <label for="quantity">Nombre de produit :</label>
-                <input type="text" name="quantity" id="quantity"><br><br>
-        
-                <input type="submit" value="Enregistrer ma commande">
+            <label for="quantity">Nombre de produit :</label>
+            <input type="text" name="quantity" id="quantity"><br><br>
+
+
+
+            <input type="submit" value="Enregistrer ma commande">
         </form>
     </body>
 </html>
