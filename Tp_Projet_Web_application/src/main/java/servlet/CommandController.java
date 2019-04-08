@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  *
@@ -30,7 +31,7 @@ import java.util.Date;
 public class CommandController extends HttpServlet {
 
     DAO dao;
-    
+
     public CommandController() throws SQLException {
         this.dao = new DAO(DataSourceFactory.getDataSource());
     }
@@ -51,11 +52,15 @@ public class CommandController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
+        request.setAttribute("Prod", dao.mesproduits());
         //System.out.print(dao.purchaseOrderPourUnClient(1).size());
         if (null != action) {
             switch (action) {
                 case "Ajouter une commande":
-                    AjouterCommande(request);
+                    request.getRequestDispatcher("formulaireAjout.jsp").forward(request, response);
+                    break;
+                case "Enregistrer ma commande":
+                    AjouterCommandeForm(request, response);
                     break;
                 case "Modifier":
                     ModifierCommande(request);
@@ -68,12 +73,18 @@ public class CommandController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    private void AjouterCommandeForm(HttpServletRequest request, HttpServletResponse response) throws DAOException, ServletException, IOException {
+        //request.getRequestDispatcher("formulaireAjout.jsp").forward(request, response);
+        System.out.println(request.getParameter("quantity"));
+        System.out.println(request.getParameter("name_product"));
+    }
+
     private void AjouterCommande(HttpServletRequest request) throws DAOException {
         HttpSession session = request.getSession();
         String action = request.getParameter("action");
         action = (action == null) ? "" : action; // Pour le switch qui n'aime pas les null
         String nCom = request.getParameter("numero de commande");
-        String produit = request.getParameter("produit");
+        //String produit = request.getParameter("produit");
         String quantite = request.getParameter("quantite");
         String prix = request.getParameter("prix");
         try {
@@ -82,7 +93,7 @@ public class CommandController extends HttpServlet {
             //OrderEntity(int order_num, int id_client, int id_produit, int quantite, float frais, String date_achat, String date_envoi, String compagnie)
             //OrderEntity o = new OrderEntity(Integer.valueOf(nCom),id_client,Integer.valueOf(produit),Integer.valueOf(quantite),Integer.valueOf(prix),String.valueOf(datedujour),,findUserInSession(request));
             //dao.ajoutPurchaseOrder(o);
-            request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
+            // request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
             /*switch (action) {
                 case "ADD": // Requête d'ajout (vient du formulaire de saisie)
                     dao.addDiscountCode(code, Float.valueOf(taux));
@@ -159,7 +170,7 @@ public class CommandController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
     private String findUserInSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         return (session == null) ? null : (String) session.getAttribute("userName");

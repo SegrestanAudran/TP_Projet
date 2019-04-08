@@ -1,24 +1,25 @@
+<%@page import="Tp_Projet.ProductEntity"%>
 <%-- 
     Document   : formulaireAjout
     Created on : 5 avr. 2019, 09:20:39
     Author     : Yasmina
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Ajouter une commande</title>
     </head>
     <body>
         <h1>Ajouter une commande</h1>
 
-        <form method="post" action="traitement">
+        <form action="<c:url value="CommandController" />" method="POST">
             <label for="name_product">Choisir le produit :</label>
             <select  name="name_product" id="name_product">
-                <c:forEach var="Cmd" items="${NouvelleCommande}" >
-                    <option id=${Cmd.product_id()}> ${Cmd.getproduct_name()} </option>
+                <c:forEach var="Pr" items="${Prod}" >
+                    <option name="produit"> ${Pr.getName()} </option>
                 </c:forEach>
             </select><br>
             <label for="quantity">Nombre de produit :</label>
@@ -26,7 +27,7 @@
 
 
 
-            <input type="submit" value="Enregistrer ma commande">
+            <input type="submit" name="action" value="Enregistrer ma commande">
         </form>
     </body>
 </html>

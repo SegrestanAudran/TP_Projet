@@ -18,7 +18,7 @@
 	<h1> Mes commandes </h1>
        
         <form action="<c:url value="CommandController" />" method="POST">
-	<input type="submit" value="Ajouter une commande" class="firstbouton" />
+	<input name="action" type="submit" value="Ajouter une commande" class="firstbouton" />
 		<table> 
 			<tr> 
 					
@@ -41,8 +41,8 @@
                                 <td> ${Cmd.getFrais()}</td>
                                 <td> ${Cmd.getDate_achat()}</td>
                                 <td> ${Cmd.getDate_envoi()}</td>
-                                <td> <input type='submit' value='Modifier' class='secondbouton' /> </td>
-                                <td> <input type='submit' value='Supprimer' class='thirdbouton' /> </td>
+                                <td> <input name="action" type='submit' value='Modifier' class='secondbouton' /> </td>
+                                <td> <input name="action" type='submit' value='Supprimer' class='thirdbouton' /> </td>
                             </tr>
                         </c:forEach>
 		</table> 
