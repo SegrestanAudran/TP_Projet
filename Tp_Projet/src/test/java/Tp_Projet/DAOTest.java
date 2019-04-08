@@ -48,11 +48,17 @@ public class DAOTest {
     public void testCreerCommande() throws DAOException {
         assertEquals(1,myDao.ajoutPurchaseOrder(order));
     }
-    // la supprimer
+  /* // la supprimer
     @Test
     public void testSupprimerCommande() throws DAOException {
         assertEquals(1,myDao.deletePurchaseOrder(166));
     }
+    */
+    @Test
+    public void testProduits() throws DAOException {
+        assertEquals("Identity Server",myDao.mesproduits().get(0).getName());
+    }
+
     //la modifier
     @Test
     public void testModifierCommande() throws DAOException {
@@ -81,4 +87,5 @@ public class DAOTest {
         assertEquals(9750.0,myDao.CAParCustomer(d1, d2).get("Big Car Parts"),0.1); 
     }
     
+ 
 }

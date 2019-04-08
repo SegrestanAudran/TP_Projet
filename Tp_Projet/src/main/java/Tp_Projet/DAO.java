@@ -329,21 +329,21 @@ public class DAO {
      * @return la liste des ids et descriptions des produits
      * @throws DAOException
      */
-    public HashMap<Integer,String> produits() throws DAOException {
+    public List<ProductEntity> mesproduits() throws DAOException {
         String sql = "SELECT PRODUCT_ID, DESCRIPTION DISCTINCT FROM PRODUCT ";
         try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
                 PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
                 ) {
             
-            HashMap<Integer,String> result = new HashMap<Integer,String>();
+            List<ProductEntity> result = new LinkedList<>();
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) { // Tant qu'il y a des enregistrements
                     // On récupère les champs nécessaires de l'enregistrement courant
                     int product_id = rs.getInt("PRODUCT_ID");
-                    String product_name = rs.getString("DESCRIPTION");
-                    
+                    String product_name = rs.getString("DISCTINCT");
+                    ProductEntity p = new ProductEntity(product_id,product_name);
                     // On l'ajoute à la liste des résultats
-                    result.put(product_id,product_name);
+                    result.add(p);
                 }
             }
             return result;
@@ -353,36 +353,40 @@ public class DAO {
         }
     }
     
-    
     /**
-     * Renvoyer true si l'email en parametre existe dans la base de données
      *
-     * @param email repr&sente l'email du client
-     * @return true si l'amail est trouvé ou false si pas trouvé
+     * @ajoute une commande
+     * @param l'objet order
+     * @result le nombre de ligne ajoutée dans la table PURCHASE_ORDER
      * @throws DAOException
      */
-    /*
-    public HashMap<String,Integer> findEmailCustomer(String email_user) throws DAOException {
-
+    public OrderEntity completePurchaseOrder(String name_product, int quantity) throws DAOException {
         // Une requête SQL paramétrée
-        String sql = "SELECT email,customer_id FROM CUSTOMER WHERE email=?";
-        HashMap<String,Integer> result = null;
+        String sql = "SELECT PRODUCT_ID FROM PURCHASE_ORDER WHERE DESCRIPTION = ? ";
+        String sql2 = ""
         try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
+                PreparedStatement stmt = connection.prepareStatement(sql);) {
             // Définir la valeur du paramètre
-            stmt.setString(1, email_user);
-           ResultSet rs = stmt.executeQuery();
-			if(rs.next()) { //soit il y a une réponse soit on passe pas par cette boucle
-				result.put(rs.getString("email"),rs.getInt("customer_id"));
-			}
-		
-		return result;
+            stmt.setInt(1, o.getOrder_num());
+            stmt.setInt(2, o.getId_client());
+            stmt.setInt(3, o.getId_produit());
+            stmt.setInt(4, o.getQuantite());
+            stmt.setFloat(5, o.getFrais());
+            stmt.setString(6, o.getDate_achat());
+            stmt.setString(7, o.getDate_envoi());
+            stmt.setString(8, o.getCompagnie());
+
+            if (stmt.executeUpdate() == 0) {
+                throw new DAOException("Échec de la création de la commande, aucune ligne ajoutée dans la table.");
+            }
+            return stmt.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
             throw new DAOException(ex.getMessage());
         }
     }
-*/
+    
+    
 
 }
