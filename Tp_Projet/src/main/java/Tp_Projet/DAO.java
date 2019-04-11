@@ -398,14 +398,14 @@ public class DAO {
             throw new DAOException(ex.getMessage());
         }
 
-        String sql2 = "SELECT MAX(Order_num) FROM PURCHASE_ORDER";
+        String sql2 = "SELECT MAX(Order_num) AS Order_num FROM PURCHASE_ORDER";
         int numero = 0;
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql2);) {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) { // Si il retrouve la valeur maximum du numero de commande
                     // On récupère les champs nécessaires de l'enregistrement courant
-                    int order_num = rs.getInt("MAX(Order_num)");
+                    int order_num = rs.getInt("Order_num");
                     // On l'ajoute à la liste des résultats
                     //le nouveau numéro de commande
                     numero = order_num++;
@@ -418,7 +418,7 @@ public class DAO {
         }
 
         String sql3 = "SELECT CUSTOMER_ID FROM CUSTOMER WHERE NAME=?";
-        int id_client = 0;
+        int id_client=0;
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql3);) {
             stmt.setString(1, name);
@@ -438,9 +438,9 @@ public class DAO {
         }
         //Date datedujourint = new Date();
         //String datedujour = df.format(today);
-
+        
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String strDate = dateFormat.format(date);
         //int amount;
         //Je veux la date dans une semaine qui est la date d'envoie
@@ -452,7 +452,7 @@ public class DAO {
 
         Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
 
-        OrderEntity result = new OrderEntity(numero, id_client, prod, quantity, frais, strDate, strDate2, compagnie);
+        OrderEntity result = new OrderEntity(numero, id_client, prod, quantity, frais, strDate, strDate, compagnie);
         return result;
     }
     
