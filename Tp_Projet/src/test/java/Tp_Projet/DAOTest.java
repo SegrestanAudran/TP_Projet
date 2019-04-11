@@ -37,7 +37,7 @@ public class DAOTest {
     int id_client = 3;
     int id_produit = 980002;
     int quantite = 10;
-    float frais = 45;
+    double frais = 45;
     String date_achat = "2019-05-05";
     String date_envoi = "2019-05-09";
     String compagnie = "Poney Express";

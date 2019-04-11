@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 import java.lang.*;
 import static java.lang.System.console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import static java.util.Collections.list;
 import javafx.util.Pair;
@@ -50,7 +52,7 @@ public class DAO {
             stmt.setInt(2, o.getId_client());
             stmt.setInt(3, o.getId_produit());
             stmt.setInt(4, o.getQuantite());
-            stmt.setFloat(5, o.getFrais());
+            stmt.setDouble(5, o.getFrais());
             stmt.setString(6, o.getDate_achat());
             stmt.setString(7, o.getDate_envoi());
             stmt.setString(8, o.getCompagnie());
@@ -68,6 +70,7 @@ public class DAO {
 
     /**
      *
+     * @param o
      * @modifier une commande
      * @param l'objet order à modifier
      * @return le nombre de ligne modifiée dans la table PURCHASE_ORDER
@@ -83,14 +86,14 @@ public class DAO {
             stmt.setInt(1, o.getId_client());
             stmt.setInt(2, o.getId_produit());
             stmt.setInt(3, o.getQuantite());
-            stmt.setFloat(4, o.getFrais());
+            stmt.setDouble(4, o.getFrais());
             stmt.setString(5, o.getDate_achat());
             stmt.setString(6, o.getDate_envoi());
             stmt.setString(7, o.getCompagnie());
             stmt.setInt(8, o.getOrder_num());
 
             if (stmt.executeUpdate() == 0) {
-                throw new DAOException("Échec de la modification de la commande, aucune ligne ajoutée dans la table.");
+                throw new DAOException("Échec de la modification de la commande, aucune ligne modifié dans la table.");
             }
             return stmt.executeUpdate();
 
@@ -115,8 +118,12 @@ public class DAO {
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             // Définir la valeur du paramètre
             stmt.setInt(1, order_num);
-
+            if (stmt.executeUpdate() == 0) {
+                throw new DAOException("Échec de la suppression de la commande, aucune ligne supprimé dans la table.");
+            }
             return stmt.executeUpdate();
+            
+            
 
         } catch (SQLException ex) {
             Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
@@ -247,9 +254,8 @@ public class DAO {
 
     /**
      * Renvoie l'email et l'id du client et le nom
-     *
-     * @param
-     * @return la un tableau contenu de l'email et l'id
+     * @param email_user
+     *@return la un tableau contenu de l'email et l'id
      * @throws DAOException
      */
     public List<CustomerEntity> findCustomers(String email_user) throws DAOException {
@@ -280,11 +286,11 @@ public class DAO {
         }
 
     }
-    
+
     /**
      * Renvoie tous les commandes d'un client donné
      *
-     * @param l'id du client
+     * @param id
      * @return un tableau contenant les commandes du client
      * @throws DAOException
      */
@@ -293,25 +299,24 @@ public class DAO {
         try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
                 PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
                 ) {
-            
+
             stmt.setInt(1, id);
             List<OrderEntity> result = new LinkedList<>();
-            
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) { // Tant qu'il y a des enregistrements
                     // On récupère les champs nécessaires de l'enregistrement courant
-                     int order = rs.getInt("order_num");
-                 
+                    int order = rs.getInt("order_num");
+
                     int product_id = rs.getInt("product_id");
                     int quantity = rs.getInt("quantity");
-                    float shipping_cost = rs.getFloat("shipping_cost");
+                    Double shipping_cost = rs.getDouble("shipping_cost");
                     String sales_date = rs.getString("sales_date");
                     String shipping_date = rs.getString("shipping_date");
                     String freight_company = rs.getString("freight_company");
-                    
+
                     // On crée l'objet entité
-                    OrderEntity c = new OrderEntity(order,id, product_id,quantity,shipping_cost,sales_date,shipping_date,freight_company);
+                    OrderEntity c = new OrderEntity(order, id, product_id, quantity, shipping_cost, sales_date, shipping_date, freight_company);
                     // On l'ajoute à la liste des résultats
                     result.add(c);
                 }
@@ -322,10 +327,10 @@ public class DAO {
             throw new DAOException(ex.getMessage());
         }
     }
-    
-    
-     /**
+
+    /**
      * Renvoie les id's et les description des produits
+     *
      * @return la liste des ids et descriptions des produits
      * @throws DAOException
      */
@@ -334,14 +339,14 @@ public class DAO {
         try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
                 PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
                 ) {
-            
+
             List<ProductEntity> result = new LinkedList<>();
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) { // Tant qu'il y a des enregistrements
                     // On récupère les champs nécessaires de l'enregistrement courant
                     int product_id = rs.getInt("PRODUCT_ID");
                     String product_name = rs.getString("DISCTINCT");
-                    ProductEntity p = new ProductEntity(product_id,product_name);
+                    ProductEntity p = new ProductEntity(product_id, product_name);
                     // On l'ajoute à la liste des résultats
                     result.add(p);
                 }
@@ -352,41 +357,132 @@ public class DAO {
             throw new DAOException(ex.getMessage());
         }
     }
-    
+
     /**
      *
+     * @param name_product
+     * @param quantity
+     * @param name
+     * @param compagnie
+     * @return 
      * @ajoute une commande
      * @param l'objet order
      * @result le nombre de ligne ajoutée dans la table PURCHASE_ORDER
      * @throws DAOException
      */
-    public OrderEntity completePurchaseOrder(String name_product, int quantity) throws DAOException {
-        // Une requête SQL paramétrée
-        String sql = "SELECT PRODUCT_ID FROM PURCHASE_ORDER WHERE DESCRIPTION = ? ";
-        String sql2 = ""
+    @SuppressWarnings("empty-statement")
+    public OrderEntity completePurchaseOrder(String name_product, int quantity, String name, String compagnie) throws DAOException {
+        // Une requête SQL paramétrée pour récupérer l'id produit par rapport au nom
+        // OrderEntity result = new OrderEntity();
+        String sql = "SELECT PRODUCT_ID,PURCHASE_COST FROM PRODUCT WHERE DESCRIPTION = ? ";
+        int prod = 0;
+        int prix = 0;
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql);) {
             // Définir la valeur du paramètre
-            stmt.setInt(1, o.getOrder_num());
-            stmt.setInt(2, o.getId_client());
-            stmt.setInt(3, o.getId_produit());
-            stmt.setInt(4, o.getQuantite());
-            stmt.setFloat(5, o.getFrais());
-            stmt.setString(6, o.getDate_achat());
-            stmt.setString(7, o.getDate_envoi());
-            stmt.setString(8, o.getCompagnie());
+            stmt.setString(1, name_product);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { // Si l'id produit existe 
+                    // On récupère les champs nécessaires de l'enregistrement courant
+                    int product_id = rs.getInt("PRODUCT_ID");
+                    int purchase_cost = rs.getInt("PURCHASE_COST");
 
-            if (stmt.executeUpdate() == 0) {
-                throw new DAOException("Échec de la création de la commande, aucune ligne ajoutée dans la table.");
+                    // On l'ajoute à la liste des résultats
+                    prod = product_id;
+                    prix = purchase_cost * quantity;
+                }
             }
-            return stmt.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
             throw new DAOException(ex.getMessage());
         }
+
+        String sql2 = "SELECT MAX(Order_num) FROM PURCHASE_ORDER";
+        int numero = 0;
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql2);) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { // Si il retrouve la valeur maximum du numero de commande
+                    // On récupère les champs nécessaires de l'enregistrement courant
+                    int order_num = rs.getInt("MAX(Order_num)");
+                    // On l'ajoute à la liste des résultats
+                    //le nouveau numéro de commande
+                    numero = order_num++;
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+            throw new DAOException(ex.getMessage());
+        }
+
+        String sql3 = "SELECT CUSTOMER_ID FROM CUSTOMER WHERE NAME=?";
+        int id_client = 0;
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql3);) {
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { // Si il retrouve la valeur maximum du numero de commande
+                    // On récupère les champs nécessaires de l'enregistrement courant
+                    int id_customer = rs.getInt("CUSTOMER_ID");
+                    // On l'ajoute à la liste des résultats
+                    //le nouveau numéro de commande
+                    id_client = id_customer;
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+            throw new DAOException(ex.getMessage());
+        }
+        //Date datedujourint = new Date();
+        //String datedujour = df.format(today);
+
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        String strDate = dateFormat.format(date);
+        //int amount;
+        //Je veux la date dans une semaine qui est la date d'envoie
+        Calendar date_envoie = Calendar.getInstance();
+        date_envoie.setTime(date);
+        date_envoie.add(Calendar.DATE, 7);
+        Date utilDate = date_envoie.getTime();
+        String strDate2 = dateFormat.format(utilDate);
+
+        Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
+
+        OrderEntity result = new OrderEntity(numero, id_client, prod, quantity, frais, strDate, strDate2, compagnie);
+        return result;
     }
     
-    
+    /**
+     * Renvoie l'email et l'id du client et le nom
+     * @param email_user
+     *@return la un tableau contenu de l'email et l'id
+     * @throws DAOException
+     */
+    public List<String> listeCompany() throws DAOException {
+        String sql = "SELECT DISTINCT freight_company FROM PURCHASE_ORDER";
+        try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
+                PreparedStatement stmt = connection.prepareStatement(sql) // On crée un statement préparé pour exécuter une requête paramétrée        
+                ) {
+            List<String> result = new LinkedList<>();
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) { // Tant qu'il y a des enregistrements
+                    // On récupère les champs nécessaires de l'enregistrement courant
 
+                    String freight_company = rs.getString("freight_company");
+
+                    // On l'ajoute à la liste des résultats
+                    result.add(freight_company);
+                }
+            }
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+            throw new DAOException(ex.getMessage());
+        }
+
+    }
 }

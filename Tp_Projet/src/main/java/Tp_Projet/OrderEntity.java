@@ -15,12 +15,12 @@ public class OrderEntity {
    private int id_client;
    private int id_produit;
    private int quantite;
-   private float frais;
+   private Double frais;
    private String date_achat;
    private String date_envoi;
    private String compagnie;
 
-    public OrderEntity(int order_num, int id_client, int id_produit, int quantite, float frais, String date_achat, String date_envoi, String compagnie) {
+    public OrderEntity(int order_num, int id_client, int id_produit, int quantite, Double frais, String date_achat, String date_envoi, String compagnie) {
         this.order_num = order_num;
         this.id_client = id_client;
         this.id_produit = id_produit;
@@ -54,7 +54,7 @@ public class OrderEntity {
         return quantite;
     }
     
-    public float getFrais(){
+    public Double getFrais(){
         return frais;
     }
     
