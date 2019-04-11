@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -46,13 +47,16 @@ public class CommandController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, DAOException {
+            throws ServletException, IOException, DAOException, SQLException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("PageCommande.jsp");
-        HttpSession session = request.getSession();
+        //HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
         request.setAttribute("Prod", dao.mesproduits());
+        System.out.println("Coucou1");
+        request.setAttribute("Company", dao.listeCompany());
+        System.out.println("Coucou2");
         //System.out.print(dao.purchaseOrderPourUnClient(1).size());
         if (null != action) {
             switch (action) {
@@ -73,10 +77,25 @@ public class CommandController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void AjouterCommandeForm(HttpServletRequest request, HttpServletResponse response) throws DAOException, ServletException, IOException {
-        //request.getRequestDispatcher("formulaireAjout.jsp").forward(request, response);
-        System.out.println(request.getParameter("quantity"));
-        System.out.println(request.getParameter("name_product"));
+    private void AjouterCommandeForm(HttpServletRequest request, HttpServletResponse response) throws DAOException, ServletException, IOException, SQLException {
+        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        //HttpSession session = request.getSession();
+        Cookie[] cookies = request.getCookies();
+        int quantity = Integer.parseInt( request.getParameter("quantity"));
+        String name_product = request.getParameter("name_product");
+        String compagnie = request.getParameter("name_company");
+        String name = findUserInSession(request);
+        System.out.println("Tu es " + name);
+        String message = null;
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("userName")) message = cookie.getValue();
+            }
+        }
+        System.out.println(message);
+        OrderEntity o = dao.completePurchaseOrder(name_product, quantity, message, compagnie);
+        System.out.println(o.getId_client());
+        dao.ajoutPurchaseOrder(o);
     }
 
     private void AjouterCommande(HttpServletRequest request) throws DAOException {
@@ -91,7 +110,6 @@ public class CommandController extends HttpServlet {
             DAO dao = new DAO(DataSourceFactory.getDataSource());
             Date datedujour = new Date();
             //OrderEntity(int order_num, int id_client, int id_produit, int quantite, float frais, String date_achat, String date_envoi, String compagnie)
-            //OrderEntity o = new OrderEntity(Integer.valueOf(nCom),id_client,Integer.valueOf(produit),Integer.valueOf(quantite),Integer.valueOf(prix),String.valueOf(datedujour),,findUserInSession(request));
             //dao.ajoutPurchaseOrder(o);
             // request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
             /*switch (action) {
@@ -140,6 +158,8 @@ public class CommandController extends HttpServlet {
             processRequest(request, response);
         } catch (DAOException ex) {
             Logger.getLogger(CommandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CommandController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -157,6 +177,8 @@ public class CommandController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
+            Logger.getLogger(CommandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(CommandController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

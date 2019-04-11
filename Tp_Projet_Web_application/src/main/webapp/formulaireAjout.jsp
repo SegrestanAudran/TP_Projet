@@ -24,6 +24,12 @@
             </select><br>
             <label for="quantity">Nombre de produit :</label>
             <input type="text" name="quantity" id="quantity"><br><br>
+            <label for="name_company">Choisir la compagnie :</label>
+            <select  name="name_company" id="name_company">
+                <c:forEach var="c" items="${Company}" >
+                    <option name="company"> ${c} </option>
+                </c:forEach>
+            </select><br>
 
 
 

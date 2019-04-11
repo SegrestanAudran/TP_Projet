@@ -16,7 +16,7 @@
 				<li class="a2"><a href=""> Votre compte </a></li>
 				<li class="a2"><a href=""> Deconnection </a></li>
 	<h1> Mes commandes </h1>
-       
+        <p>${sessionscope.userName}</p>
         <form action="<c:url value="CommandController" />" method="POST">
 	<input name="action" type="submit" value="Ajouter une commande" class="firstbouton" />
 		<table> 

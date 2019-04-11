@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 
 /**
  *
@@ -55,6 +56,8 @@ public class LoginController extends HttpServlet {
         String userName = findUserInSession(request);
         System.out.print(userName);
         String jspView;
+        Cookie message = new Cookie("userName", userName);
+        response.addCookie(message);
         if (null == userName) { // L'utilisateur n'est pas connecté
             // On choisit la page de login
             jspView = "PageConnection.jsp";
@@ -77,18 +80,10 @@ public class LoginController extends HttpServlet {
         // Les paramètres transmis dans la requête
         String loginParam = request.getParameter("loginParam");
         String passwordParam = request.getParameter("passwordParam");
-
         // Le login/password défini dans web.xml est celui de la connexion en administrateur
         String loginAdmin = getInitParameter("adminL");
-        //if(loginAdmin == null)
-        //   request.setAttribute("errorMessage","c'est nul" );
-
         String passwordAdmin = getInitParameter("adminP");
-//                String loginAdmin = "untel";
-//		String passwordAdmin = "ABCD";
-        //String adminName = getInitParameter("userName");
         String adminName = "Coucou";
-        //System.out.print("Coucou ici");
         // Le login/password défini dans la base de données est celui des utilisateurs
         String loginUser;
         String passwordUser;
@@ -104,22 +99,18 @@ public class LoginController extends HttpServlet {
 
         if (dao.findCustomers(loginParam).size() != 0) {
             loginUser = loginParam;
-            //System.out.print("Hello !");
-            //System.out.print(dao.findCustomers(loginUser).size());
             CustomerEntity user = dao.findCustomers(loginUser).get(0);
-            //passwordUser = String.valueOf(dao.findEmailCustomer(loginUser).get(loginUser));
             passwordUser = String.valueOf(user.getCustomerId());
             userName = dao.findCustomers(loginUser).get(0).getName();
             if ((loginUser.equals(loginParam) && (passwordUser.equals(passwordParam)))) {
                 // On a trouvé la combinaison login / password
                 // On stocke l'information dans la session
-                //System.out.print("Coucou là");
                 HttpSession session = request.getSession(true); // démarre la session
                 session.setAttribute("userName", userName);
             }
         }
-        // On positionne un message d'erreur pour l'afficher dans la JSP
-        //request.setAttribute("errorMessage","erreur" );
+        //On positionne un message d'erreur pour l'afficher dans la JSP
+        request.setAttribute("errorMessage","erreur" );
 
     }
 
