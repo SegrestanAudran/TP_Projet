@@ -45,9 +45,9 @@ public class DAOTest {
    OrderEntity order = new OrderEntity(order_num, id_client,id_produit,quantite,frais,date_achat,date_envoi,compagnie);
     
     //@Test
-    public void testCreerCommande() throws DAOException {
-        assertEquals(1,myDao.ajoutPurchaseOrder(order));
-    }
+//    public void testCreerCommande() throws DAOException {
+//        assertEquals(1,myDao.ajoutPurchaseOrder(order));
+//    }
   /* // la supprimer
     @Test
     public void testSupprimerCommande() throws DAOException {
@@ -60,10 +60,10 @@ public class DAOTest {
     }
 
     //la modifier
-    @Test
-    public void testModifierCommande() throws DAOException {
-       assertEquals(1,myDao.modifierPurchaseOrder(order));
-    }
+    //@Test
+//    public void testModifierCommande() throws DAOException {
+//       assertEquals(1,myDao.modifierPurchaseOrder(order));
+//    }
     
     @Test
     public void testCAParCategorie() throws DAOException {

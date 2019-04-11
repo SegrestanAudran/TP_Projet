@@ -42,30 +42,51 @@ public class DAO {
      * @result le nombre de ligne ajoutée dans la table PURCHASE_ORDER
      * @throws DAOException
      */
-    public int ajoutPurchaseOrder(OrderEntity o) throws DAOException {
+    public OrderEntity ajoutPurchaseOrder(OrderEntity o) throws DAOException, SQLException {
         // Une requête SQL paramétrée
-        String sql = "INSERT INTO Purchase_Order(Order_num,customer_id,product_id,quantity,shipping_cost, sales_date,shipping_date,freight_company) VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Purchase_Order VALUES(?,?,?,?,?,'2011-05-24','2011-05-24',?)";
         try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql);) {
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
             // Définir la valeur du paramètre
-            stmt.setInt(1, o.getOrder_num());
+            stmt.setInt(1, o.getOrder_num()+1);
             stmt.setInt(2, o.getId_client());
             stmt.setInt(3, o.getId_produit());
             stmt.setInt(4, o.getQuantite());
-            stmt.setDouble(5, o.getFrais());
-            stmt.setString(6, o.getDate_achat());
-            stmt.setString(7, o.getDate_envoi());
-            stmt.setString(8, o.getCompagnie());
+               stmt.setDouble(5, o.getFrais());
+ //        stmt.setString(6, o.getDate_achat());
+ //         stmt.setString(7, o.getDate_envoi());
+          stmt.setString(6, o.getCompagnie());
+            stmt.executeUpdate();
 
-            if (stmt.executeUpdate() == 0) {
-                throw new DAOException("Échec de la création de la commande, aucune ligne ajoutée dans la table.");
-            }
-            return stmt.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
-            throw new DAOException(ex.getMessage());
         }
+            return o;
+
+       
+    }
+    
+        public OrderEntity ajoutPurchaseOrder1(OrderEntity o) throws DAOException, SQLException {
+        // Une requête SQL paramétrée
+//        int a=15;
+//        int b=1;
+//        int c=20;
+//        int g=980001;
+//        String d="2011-05-24";
+//        String e="2011-05-24";
+//        String f="Poney Express";
+        String sql = "INSERT INTO Purchase_Order VALUES(15,1,980001,15,20,'2011-05-24','2011-05-24','Poney Express')";
+        
+        
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Définir la valeur du paramètre
+           
+            stmt.executeUpdate();
+                        System.out.println("bou");
+
+        }
+            return o;
+
+       
     }
 
     /**
