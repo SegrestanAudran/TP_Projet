@@ -107,6 +107,9 @@ public class LoginController extends HttpServlet {
                 // On stocke l'information dans la session
                 HttpSession session = request.getSession(true); // démarre la session
                 session.setAttribute("userName", userName);
+                session.setAttribute("id", user.getCustomerId());
+                request.setAttribute("Commande", dao.purchaseOrderPourUnClient(user.getCustomerId()));
+
             }
         }
         //On positionne un message d'erreur pour l'afficher dans la JSP

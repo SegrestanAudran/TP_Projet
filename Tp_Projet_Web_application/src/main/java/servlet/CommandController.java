@@ -52,7 +52,6 @@ public class CommandController extends HttpServlet {
         //HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
-        request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
         request.setAttribute("Prod", dao.mesproduits());
         System.out.println("Coucou1");
         request.setAttribute("Company", dao.listeCompany());
@@ -71,6 +70,8 @@ public class CommandController extends HttpServlet {
                     break;
                 case "Supprimer":
                     SupprimerCommande(request);
+                    request.getRequestDispatcher("PageCommande.jsp").forward(request, response);
+
                     break;
             }
         }
@@ -81,15 +82,17 @@ public class CommandController extends HttpServlet {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         //HttpSession session = request.getSession();
         Cookie[] cookies = request.getCookies();
-        int quantity = Integer.parseInt( request.getParameter("quantity"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
         String name_product = request.getParameter("name_product");
         String compagnie = request.getParameter("name_company");
         String name = findUserInSession(request);
         System.out.println("Tu es " + name);
         String message = null;
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("userName")) message = cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userName")) {
+                    message = cookie.getValue();
+                }
             }
         }
         System.out.println(message);
@@ -138,7 +141,12 @@ public class CommandController extends HttpServlet {
 
     }
 
-    private void SupprimerCommande(HttpServletRequest request) throws DAOException {
+    private void SupprimerCommande(HttpServletRequest request) throws DAOException, SQLException {
+        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        int o = Integer.valueOf(request.getParameter("Order_num"));
+        dao.deletePurchaseOrder(o);
+        HttpSession session = request.getSession(false);
+        request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }
 
