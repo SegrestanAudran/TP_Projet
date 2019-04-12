@@ -11,6 +11,8 @@ import Tp_Projet.DataSourceFactory;
 import Tp_Projet.OrderEntity;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -53,9 +55,10 @@ public class CommandController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
         request.setAttribute("Prod", dao.mesproduits());
-        System.out.println("Coucou1");
+        //  System.out.println("Coucou1");
         request.setAttribute("Company", dao.listeCompany());
-        System.out.println("Coucou2");
+        //  System.out.println("Coucou2");
+        //  request.setAttribute("order", dao.selectPurchaseOrder());
         //System.out.print(dao.purchaseOrderPourUnClient(1).size());
         if (null != action) {
             switch (action) {
@@ -67,7 +70,11 @@ public class CommandController extends HttpServlet {
                     request.getRequestDispatcher("PageCommande.jsp").forward(request, response);
                     break;
                 case "Modifier":
-                    ModifierCommande(request);
+                    ModifierCommande(request, response);
+                    break;
+                case "Modifier ma commande":
+
+                    request.getRequestDispatcher("PageCommande.jsp").forward(request, response);
                     break;
                 case "Supprimer":
                     SupprimerCommande(request);
@@ -97,14 +104,45 @@ public class CommandController extends HttpServlet {
 
     }
 
-    private void ModifierCommande(HttpServletRequest request) throws DAOException {
+    private void ModifierCommande(HttpServletRequest request, HttpServletResponse response) throws DAOException, SQLException {
+        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        HttpSession session = request.getSession(false);
+        int o = Integer.valueOf(request.getParameter("Order_num"));
+        String name = (String) session.getAttribute("userName");
+
+        OrderEntity Order = dao.selectPurchaseOrder(o);
+        
+        String order = request.getParameter("order");
+        
+        String name_product = dao.selectDescriptionProd(o);
+        request.setAttribute("Order", order);
+        request.setAttribute("name_product", name_product);
+        int id_produit = dao.selectIdProduit(name);
+        int orderModif = dao.modifierPurchaseOrder(Order);
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String compagnie = request.getParameter("name_company");
+        request.setAttribute("quantity", quantity);
+        request.setAttribute("compagnie", compagnie);
+        int id_client = dao.selectIdClient(name);
+
+        Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
+
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate l = LocalDate.now();
+        String date_achat = dt.format(l);
+
+        LocalDate semaine = LocalDate.now().plusDays(7);
+        String date_envoi = dt.format(semaine);
+        OrderEntity or = new OrderEntity(o, id_client, id_produit, quantity, frais, date_achat, date_envoi, compagnie);
+        dao.modifierPurchaseOrder(or);
+        request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }
 
     private void SupprimerCommande(HttpServletRequest request) throws DAOException, SQLException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         int o = Integer.valueOf(request.getParameter("Order_num"));
-       dao.deletePurchaseOrder(o);
+        dao.deletePurchaseOrder(o);
         HttpSession session = request.getSession(false);
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 

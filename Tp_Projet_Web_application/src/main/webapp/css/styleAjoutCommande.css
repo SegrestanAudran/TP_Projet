@@ -1,0 +1,34 @@
+h1{
+
+	text-align: center;
+	margin-top: 200px;
+	color:#0564CD;
+	font-size:70px;
+}
+
+label{
+	font: normal 8pt verdana, helvetica;
+	font-family: Montserrat-Bold;
+	margin:auto;	
+}
+
+#form{
+		display:table;
+		margin-top: 50px;
+		margin-left: 100px;
+		margin-right:100px;
+		width:60%;
+}
+
+fieldset {
+    padding: 20px;
+    border: 3px #0568CD solid;
+	margin-top: auto;
+	margin-bottom:auto;
+	width: 50%;
+
+}
+
+br{
+    line-height:25px;
+}
