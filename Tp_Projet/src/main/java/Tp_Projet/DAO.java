@@ -16,6 +16,7 @@ import static java.lang.System.console;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import static java.util.Collections.list;
 import javafx.util.Pair;
 
@@ -44,7 +45,7 @@ public class DAO {
      */
     public OrderEntity ajoutPurchaseOrder(OrderEntity o) throws DAOException, SQLException {
         // Une requête SQL paramétrée
-        String sql = "INSERT INTO Purchase_Order VALUES(?,?,?,?,?,'2011-05-24','2011-05-24',?)";
+        String sql = "INSERT INTO Purchase_Order VALUES(?,?,?,?,?,?,?,?)";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             // Définir la valeur du paramètre
@@ -52,10 +53,10 @@ public class DAO {
             stmt.setInt(2, o.getId_client());
             stmt.setInt(3, o.getId_produit());
             stmt.setInt(4, o.getQuantite());
-               stmt.setDouble(5, o.getFrais());
- //        stmt.setString(6, o.getDate_achat());
- //         stmt.setString(7, o.getDate_envoi());
-          stmt.setString(6, o.getCompagnie());
+            stmt.setDouble(5, o.getFrais());
+            stmt.setString(6, o.getDate_achat());
+            stmt.setString(7, o.getDate_envoi());
+            stmt.setString(8, o.getCompagnie());
             stmt.executeUpdate();
 
         }
@@ -457,23 +458,35 @@ public class DAO {
             Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
             throw new DAOException(ex.getMessage());
         }
+        
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate l = LocalDate.now();
+        String today = dt.format(l);
+        
+        LocalDate semaine = LocalDate.now().plusDays(7);
+        String sem = dt.format(semaine);
         //Date datedujourint = new Date();
         //String datedujour = df.format(today);
         
-        Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        String strDate = dateFormat.format(date);
+//        Date date = Calendar.getInstance().getTime();
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+//        String strDate = dateFormat.format(date);
+        //2011-05-24
         //int amount;
         //Je veux la date dans une semaine qui est la date d'envoie
-        Calendar date_envoie = Calendar.getInstance();
-        date_envoie.setTime(date);
-        date_envoie.add(Calendar.DATE, 7);
-        Date utilDate = date_envoie.getTime();
-        String strDate2 = dateFormat.format(utilDate);
+        //Calendar date_envoie = Calendar.getInstance();
+        //date_envoie.setTime(date);
+       // date_envoie.add(Calendar.DATE, 7);
+        //Date utilDate = date_envoie.getTime();
+        //String strDate2 = dateFormat.format(utilDate);
+        
+        //String newstring = datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
+        
 
         Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
 
-        OrderEntity result = new OrderEntity(numero, id_client, prod, quantity, frais, strDate, strDate, compagnie);
+        OrderEntity result = new OrderEntity(numero, id_client, prod, quantity, frais, today, sem, compagnie);
         return result;
     }
     

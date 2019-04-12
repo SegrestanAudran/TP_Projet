@@ -16,8 +16,7 @@ public class main {
     public static void main(String[] args) throws SQLException, DAOException {
  DAO dao = new DAO(DataSourceFactory.getDataSource());
    OrderEntity o = dao.completePurchaseOrder("Identity Server", 15, "Jumbo Eagle Corp", "Coastal Freight");
-   System.out.print(o.getCompagnie());
-    OrderEntity i=dao.ajoutPurchaseOrder(o);
-    System.out.println(i.getId_produit());
+   System.out.print(o.getDate_achat());
+   OrderEntity i=dao.ajoutPurchaseOrder(o);
 }
 }
