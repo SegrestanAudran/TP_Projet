@@ -109,7 +109,7 @@ public class LoginController extends HttpServlet {
                 session.setAttribute("userName", userName);
                 session.setAttribute("id", user.getCustomerId());
                 request.setAttribute("Commande", dao.purchaseOrderPourUnClient(user.getCustomerId()));
-
+                
             }
         }
         //On positionne un message d'erreur pour l'afficher dans la JSP

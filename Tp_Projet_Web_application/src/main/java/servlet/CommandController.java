@@ -64,6 +64,7 @@ public class CommandController extends HttpServlet {
                     break;
                 case "Enregistrer ma commande":
                     AjouterCommandeForm(request, response);
+                    request.getRequestDispatcher("PageCommande.jsp").forward(request, response);
                     break;
                 case "Modifier":
                     ModifierCommande(request);
@@ -80,27 +81,23 @@ public class CommandController extends HttpServlet {
 
     private void AjouterCommandeForm(HttpServletRequest request, HttpServletResponse response) throws DAOException, ServletException, IOException, SQLException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
-        //HttpSession session = request.getSession();
-        Cookie[] cookies = request.getCookies();
+        HttpSession session = request.getSession(false);
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String name_product = request.getParameter("name_product");
         String compagnie = request.getParameter("name_company");
-        String name = findUserInSession(request);
-        System.out.println("Tu es " + name);
-        String message = null;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("userName")) {
-                    message = cookie.getValue();
-                }
-            }
-        }
-        System.out.println(message);
-        OrderEntity o = dao.completePurchaseOrder(name_product, quantity, message, compagnie);
-        System.out.println(o.getId_client());
-        dao.ajoutPurchaseOrder(o);
-    }
+        String name = (String) session.getAttribute("userName");
+        request.setAttribute("quantity", quantity);
+        request.setAttribute("name_product", name_product);
+        request.setAttribute("compagnie", compagnie);
+        request.setAttribute("userName", name);
+       OrderEntity o = dao.completePurchaseOrder(name_product, quantity, name, compagnie);
+             request.setAttribute("userName", name);
 
+       OrderEntity i=dao.ajoutPurchaseOrder(o);
+        request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
+
+    }
+/*
     private void AjouterCommande(HttpServletRequest request) throws DAOException {
         HttpSession session = request.getSession();
         String action = request.getParameter("action");
@@ -130,13 +127,13 @@ public class CommandController extends HttpServlet {
                         request.setAttribute("message", "Impossible de supprimer " + code + ", ce code est utilisé.");
                     }
                     break;
-            }*/
+            }
         } catch (Exception ex) {
             Logger.getLogger("discountEditor").log(Level.SEVERE, "Action en erreur", ex);
             request.setAttribute("message", ex.getMessage());
         }
     }
-
+*/
     private void ModifierCommande(HttpServletRequest request) throws DAOException {
 
     }

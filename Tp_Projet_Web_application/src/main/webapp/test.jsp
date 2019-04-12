@@ -13,8 +13,15 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        ${id}
-        ${num}
+        ${quantity}
+        <br>
+       ${name_product}
+               <br>
+
+        ${compagnie}
+                <br>
+
+        ${userName}
         
     </body>
 </html>
