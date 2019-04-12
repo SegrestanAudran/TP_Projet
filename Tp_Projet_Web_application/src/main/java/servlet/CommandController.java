@@ -90,50 +90,13 @@ public class CommandController extends HttpServlet {
         request.setAttribute("name_product", name_product);
         request.setAttribute("compagnie", compagnie);
         request.setAttribute("userName", name);
-       OrderEntity o = dao.completePurchaseOrder(name_product, quantity, name, compagnie);
-             request.setAttribute("userName", name);
-
-       OrderEntity i=dao.ajoutPurchaseOrder(o);
+        OrderEntity o = dao.completePurchaseOrder(name_product, quantity, name, compagnie);
+        request.setAttribute("userName", name);
+        OrderEntity i = dao.ajoutPurchaseOrder(o);
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }
-/*
-    private void AjouterCommande(HttpServletRequest request) throws DAOException {
-        HttpSession session = request.getSession();
-        String action = request.getParameter("action");
-        action = (action == null) ? "" : action; // Pour le switch qui n'aime pas les null
-        String nCom = request.getParameter("numero de commande");
-        //String produit = request.getParameter("produit");
-        String quantite = request.getParameter("quantite");
-        String prix = request.getParameter("prix");
-        try {
-            DAO dao = new DAO(DataSourceFactory.getDataSource());
-            Date datedujour = new Date();
-            //OrderEntity(int order_num, int id_client, int id_produit, int quantite, float frais, String date_achat, String date_envoi, String compagnie)
-            //dao.ajoutPurchaseOrder(o);
-            // request.setAttribute("Commande", dao.purchaseOrderPourUnClient(1));
-            /*switch (action) {
-                case "ADD": // Requête d'ajout (vient du formulaire de saisie)
-                    dao.addDiscountCode(code, Float.valueOf(taux));
-                    request.setAttribute("message", "Code " + code + " Ajouté");
-                    request.setAttribute("codes", dao.allCodes());                    
-                    break;
-                case "DELETE": // Requête de suppression (vient du lien hypertexte)
-                    try {
-                        dao.deleteDiscountCode(code);
-                        request.setAttribute("message", "Code " + code + " Supprimé");
-                        request.setAttribute("codes", dao.allCodes());                        
-                    } catch (SQLIntegrityConstraintViolationException e) {
-                        request.setAttribute("message", "Impossible de supprimer " + code + ", ce code est utilisé.");
-                    }
-                    break;
-            }
-        } catch (Exception ex) {
-            Logger.getLogger("discountEditor").log(Level.SEVERE, "Action en erreur", ex);
-            request.setAttribute("message", ex.getMessage());
-        }
-    }
-*/
+
     private void ModifierCommande(HttpServletRequest request) throws DAOException {
 
     }
@@ -141,7 +104,7 @@ public class CommandController extends HttpServlet {
     private void SupprimerCommande(HttpServletRequest request) throws DAOException, SQLException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         int o = Integer.valueOf(request.getParameter("Order_num"));
-        dao.deletePurchaseOrder(o);
+       dao.deletePurchaseOrder(o);
         HttpSession session = request.getSession(false);
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
