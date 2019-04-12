@@ -465,25 +465,6 @@ public class DAO {
         
         LocalDate semaine = LocalDate.now().plusDays(7);
         String sem = dt.format(semaine);
-        //Date datedujourint = new Date();
-        //String datedujour = df.format(today);
-        
-//        Date date = Calendar.getInstance().getTime();
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-//        String strDate = dateFormat.format(date);
-        //2011-05-24
-        //int amount;
-        //Je veux la date dans une semaine qui est la date d'envoie
-        //Calendar date_envoie = Calendar.getInstance();
-        //date_envoie.setTime(date);
-       // date_envoie.add(Calendar.DATE, 7);
-        //Date utilDate = date_envoie.getTime();
-        //String strDate2 = dateFormat.format(utilDate);
-        
-        //String newstring = datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        
-        
-
         Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
 
         OrderEntity result = new OrderEntity(numero, id_client, prod, quantity, frais, today, sem, compagnie);
@@ -519,4 +500,77 @@ public class DAO {
         }
 
     }
+    
+    public OrderEntity selectPurchaseOrder(int num) throws SQLException {
+        OrderEntity o = null;
+        String sql = "SELECT * FROM PURCHASE_ORDER WHERE ORDER_NUM=? ";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, num);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int idCustom = rs.getInt("CUSTOMER_ID");
+                int idProd = rs.getInt("PRODUCT_ID");
+                int qtt = rs.getInt("QUANTITY");
+                double shipCost = rs.getDouble("SHIPPING_COST");
+                String shipDate = rs.getString("SHIPPING_DATE");
+                String saleDate = rs.getString("SALES_DATE");
+                String freight = rs.getString("FREIGHT_COMPANY");
+                // On crée l'objet entité
+                o = new OrderEntity(num, idCustom, idProd, qtt, shipCost, shipDate, saleDate, freight);
+            }
+            return o;
+        }
+    }
+    
+    // Méthode DAO: Récupérer la description d'un produit à partir de son id
+    public String selectDescriptionProd(int id) throws SQLException {
+        String sql = "SELECT DESCRIPTION FROM PRODUCT WHERE PRODUCT_ID=? ";
+        String descript = "";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                descript = rs.getString("DESCRIPTION");
+            }
+            return descript;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    public int selectIdClient(String name) throws SQLException {
+        String sql = "SELECT CUSTOMER_ID FROM CUSTOMER WHERE NAME=?";
+        int id = 0;
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("CUSTOMER_ID");
+
+            }
+            return id;
+        }
+    }
+    
+    public int selectIdProduit(String name) throws SQLException {
+        String sql = "SELECT PRODUCT_ID FROM CUSTOMER WHERE NAME=?";
+        int id = 0;
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("PRODUCT_ID");
+
+            }
+            return id;
+        }
+    }
+    
 }
