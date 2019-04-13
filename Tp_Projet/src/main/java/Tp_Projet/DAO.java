@@ -349,6 +349,8 @@ public class DAO {
             throw new DAOException(ex.getMessage());
         }
     }
+    
+    
 
     /**
      * Renvoie les id's et les description des produits
@@ -538,11 +540,6 @@ public class DAO {
         }
     }
     
-    
-    
-    
-    
-    
     public int selectIdClient(String name) throws SQLException {
         String sql = "SELECT CUSTOMER_ID FROM CUSTOMER WHERE NAME=?";
         int id = 0;
@@ -566,11 +563,30 @@ public class DAO {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                id = rs.getInt("PRODUCT_ID");
+                id = rs.getInt("CUSTOMER_ID");
 
             }
             return id;
         }
     }
+    
+    public String selectNameProduit(int id) throws SQLException {
+        String sql = "SELECT DESCRIPTION FROM PRODUCT JOIN PURCHASE_ORDER USING(PRODUCT_ID) WHERE ORDER_NUM=?";
+       String name = null;
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+               name = rs.getString("DESCRIPTION");
+
+            }
+            return name;
+        }
+    }
+    
+    
+    
+    
     
 }
