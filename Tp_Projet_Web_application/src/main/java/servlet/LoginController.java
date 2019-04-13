@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
 
 /**
  *
@@ -56,13 +55,11 @@ public class LoginController extends HttpServlet {
         String userName = findUserInSession(request);
         System.out.print(userName);
         String jspView;
-        Cookie message = new Cookie("userName", userName);
-        response.addCookie(message);
         if (null == userName) { // L'utilisateur n'est pas connecté
             // On choisit la page de login
             jspView = "PageConnection.jsp";
 
-        } else if (userName == getInitParameter("userName")) { // L'administrateur est connecté
+        } else if (userName.equals(getInitParameter("userName"))) { // L'administrateur est connecté
             // On choisit la page d'affichage de l'administrateur
             jspView = "PageAdministrateur.jsp";
             
@@ -83,7 +80,7 @@ public class LoginController extends HttpServlet {
         // Le login/password défini dans web.xml est celui de la connexion en administrateur
         String loginAdmin = getInitParameter("adminL");
         String passwordAdmin = getInitParameter("adminP");
-        String adminName = "Coucou";
+        String adminName = getInitParameter("userName");
         // Le login/password défini dans la base de données est celui des utilisateurs
         String loginUser;
         String passwordUser;
