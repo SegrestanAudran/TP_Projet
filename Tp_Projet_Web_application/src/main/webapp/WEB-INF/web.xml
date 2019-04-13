@@ -6,11 +6,11 @@
         <!-- Les identifiants pour se connecter -->
         <init-param>
             <param-name>adminL</param-name>
-            <param-value>alexandra</param-value>
+            <param-value>alex</param-value>
         </init-param>
         <init-param>
             <param-name>adminP</param-name>
-            <param-value>alexandra</param-value>
+            <param-value>alex</param-value>
         </init-param>
         <init-param>
             <param-name>userName</param-name>

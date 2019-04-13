@@ -64,7 +64,7 @@ public class LoginController extends HttpServlet {
 
         } else if (userName == getInitParameter("userName")) { // L'administrateur est connecté
             // On choisit la page d'affichage de l'administrateur
-            jspView = "PageCommande.jsp";
+            jspView = "PageAdministrateur.jsp";
             
         } else { // L'utilisateur est connecté
             // On choisit la page d'affichage
