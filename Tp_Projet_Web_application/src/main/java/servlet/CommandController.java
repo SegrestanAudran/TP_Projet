@@ -70,10 +70,11 @@ public class CommandController extends HttpServlet {
                     request.getRequestDispatcher("PageCommande.jsp").forward(request, response);
                     break;
                 case "Modifier":
-                    ModifierCommande(request, response);
+                    ModifierCommandeForm(request);
+                     request.getRequestDispatcher("formulaireModifier.jsp").forward(request, response);
                     break;
                 case "Modifier ma commande":
-
+                    ModifierCommande(request, response);
                     request.getRequestDispatcher("PageCommande.jsp").forward(request, response);
                     break;
                 case "Supprimer":
@@ -103,38 +104,36 @@ public class CommandController extends HttpServlet {
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }
+    
+    public void ModifierCommandeForm(HttpServletRequest request) throws DAOException, SQLException{
+        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        int o = Integer.valueOf(request.getParameter("Order_num"));
+        
+        OrderEntity Order = dao.selectPurchaseOrder(o);
+        String name_product = dao.selectNameProduit(o);
+        System.out.println("cousou");
+        System.out.println(name_product);
+        request.setAttribute("Order", Order);
+        request.setAttribute("name_product", name_product);
+        request.setAttribute("compagnie", dao.listeCompany());
+         
+    }
 
     private void ModifierCommande(HttpServletRequest request, HttpServletResponse response) throws DAOException, SQLException {
+                System.out.println("debut");
+
         DAO dao = new DAO(DataSourceFactory.getDataSource());
-        HttpSession session = request.getSession(false);
         int o = Integer.valueOf(request.getParameter("Order_num"));
-        String name = (String) session.getAttribute("userName");
-
+         System.out.println("voici la valeur"+o);
         OrderEntity Order = dao.selectPurchaseOrder(o);
-        
-        String order = request.getParameter("order");
-        
-        String name_product = dao.selectDescriptionProd(o);
-        request.setAttribute("Order", order);
-        request.setAttribute("name_product", name_product);
-        int id_produit = dao.selectIdProduit(name);
-        int orderModif = dao.modifierPurchaseOrder(Order);
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        String compagnie = request.getParameter("name_company");
-        request.setAttribute("quantity", quantity);
-        request.setAttribute("compagnie", compagnie);
-        int id_client = dao.selectIdClient(name);
-
         Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
+        System.out.println("milieu");
+        OrderEntity or = new OrderEntity(o, Order.getId_client(), Order.getId_produit(),  Integer.parseInt(request.getParameter("quantity")), frais, Order.getDate_achat(), Order.getDate_envoi(), request.getParameter("name_company"));
+                System.out.println(o);
 
-        DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate l = LocalDate.now();
-        String date_achat = dt.format(l);
-
-        LocalDate semaine = LocalDate.now().plusDays(7);
-        String date_envoi = dt.format(semaine);
-        OrderEntity or = new OrderEntity(o, id_client, id_produit, quantity, frais, date_achat, date_envoi, compagnie);
         dao.modifierPurchaseOrder(or);
+        System.out.println( dao.modifierPurchaseOrder(or));
+         HttpSession session = request.getSession(false);
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }

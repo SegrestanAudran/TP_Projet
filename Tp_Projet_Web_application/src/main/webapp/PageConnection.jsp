@@ -7,7 +7,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Connexion</title>
-        <link type="text/css" rel="stylesheet" href="CSS\style.css" />
+        <link type="text/css" rel="stylesheet" href="css\styles.css" />
     </head>
     <body>
         <div>
