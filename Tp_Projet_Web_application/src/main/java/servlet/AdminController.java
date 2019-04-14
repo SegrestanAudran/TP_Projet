@@ -43,52 +43,87 @@ public class AdminController extends HttpServlet {
      * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException, DAOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("PageAdministrateur.jsp");
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("adminAction");
+        AfficherGraph(request,response);
         if (null != action){
             switch(action){
                 case "Voir mon graphique" :
-                    //AfficherGraph(request);
+                    AfficherGraph(request,response);
                     request.getRequestDispatcher("PageAdministrateur.jsp").forward(request,response);
                     break;
             }
         }
         dispatcher.forward(request, response);
     }
-    private void AfficherGraph(HttpServletRequest request,HttpServletResponse response) throws SQLException, DAOException, IOException{
-        /*DAO dao = new DAO(DataSourceFactory.getDataSource());
+    private void AfficherGraph(HttpServletRequest request,HttpServletResponse response) throws DAOException, IOException, SQLException, ServletException{
+        DAO dao = new DAO(DataSourceFactory.getDataSource());
         HttpSession session = request.getSession(false);
         String cat = request.getParameter("ChoixSelect");
         String datd = request.getParameter("Date_debut");
         String datf = request.getParameter("Date_fin");
         if(cat == "Categorie"){
-            request.setAttribute("CA",dao.CAParCategorie(datd, datf));
+            //request.getRequestDispatcher("SalesByCustomersInJSON").forward(request, response);
+            session.setAttribute("CA",dao.CAParCategorie(datd, datf));
         }
         if(cat == "Client"){
-            request.setAttribute("CA",dao.CAParCustomer(datd, datf));
+            session.setAttribute("CA",dao.CAParCustomer(datd, datf));
         }
         if(cat == "Zone Géographique"){
-            request.setAttribute("CA",dao.CAParState(datd, datf));
-        }*/
-        DAO dao = new DAO(DataSourceFactory.getDataSource());
-		// Properties est une Map<clé, valeur> pratique pour générer du JSON
-		String datd = request.getParameter("Date_debut");
-                String datf = request.getParameter("Date_fin");
-                Properties resultat = new Properties();
-                resultat.put("records", dao.CAParCustomer(datd, datf));
-
-		try (PrintWriter out = response.getWriter()) {
-			// On spécifie que la servlet va générer du JSON
-			response.setContentType("application/json;charset=UTF-8");
-			// Générer du JSON
-			// Gson gson = new Gson();
-			// setPrettyPrinting pour que le JSON généré soit plus lisible
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			String gsonData = gson.toJson(resultat);
-			out.println(gsonData);
-		}
+            session.setAttribute("CA",dao.CAParState(datd, datf));
+        }
     }
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+	/**
+	 * Handles the HTTP <code>GET</code> method.
+	 *
+	 * @param request servlet request
+	 * @param response servlet response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException if an I/O error occurs
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+            try {
+                processRequest(request, response);
+            } catch (DAOException ex) {
+                Logger.getLogger(SalesByCustomerInJSON.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+	}
+
+	/**
+	 * Handles the HTTP <code>POST</code> method.
+	 *
+	 * @param request servlet request
+	 * @param response servlet response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException if an I/O error occurs
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+            try {
+                processRequest(request, response);
+            } catch (DAOException ex) {
+                Logger.getLogger(SalesByCustomerInJSON.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+	}
+
+	/**
+	 * Returns a short description of the servlet.
+	 *
+	 * @return a String containing servlet description
+	 */
+	@Override
+	public String getServletInfo() {
+		return "Short description";
+	}// </editor-fold>
 }
         

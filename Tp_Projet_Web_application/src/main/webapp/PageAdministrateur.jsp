@@ -16,7 +16,7 @@
     </head>
     <body>
         <h1>Les graphiques de Chiffre d'Affaires</h1>
-        <form method="post" action="<c:url value="AdminController" />">
+        <form method="POST" action="<c:url value="AdminController" />">
             <label for="Choix">Chiffre d'affaire par :</label>
             <select  name="choixSelect" id="choixSelect">
                 <option id='1'>Catégorie</option>
@@ -27,7 +27,7 @@
             <input type="date" name="adminAction" id="Date_debut">
             <label for="Date_fin">Date de fin :</label>
             <input type="date" name="adminAction" id="Date_fin">
-            <input type="submit" name="adminAction" value="Voir mon graphique">
+            <input type="submit" name="adminAction" value="Voir mon graphique" id="affgraph">
             <div id="piechart" style="width: 900px; height: 500px;"></div>
         </form>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -40,7 +40,7 @@
 		// Après le chargement de la page, on fait l'appel AJAX
 		google.setOnLoadCallback(doAjax);
 		
-		function drawChart(${CA}) {
+		function drawChart(dataArray) {
 			var data = google.visualization.arrayToDataTable(dataArray);
 			var options = {
 				title: 'Ventes par client',
