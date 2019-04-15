@@ -69,7 +69,7 @@ public class SalesByCustomerInJSON extends HttpServlet {
             String gsonData = gson.toJson(resultat);
             out.println(gsonData);
         }
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

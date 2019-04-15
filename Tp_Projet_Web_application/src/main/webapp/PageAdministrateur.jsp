@@ -19,15 +19,15 @@
         <form method="POST" action="<c:url value="AdminController" />">
             <label for="Choix">Chiffre d'affaire par :</label>
             <select  name="choixSelect" id="choixSelect">
-                <option id='1'>Catégorie</option>
-                <option id='2'>Zone Géographique</option>
+                <option id='1'>Categorie</option>
+                <option id='2'>Zone Geographique</option>
                 <option id='3'>Client</option>
             </select><br>
             <label for="Date_debut">Date de début :</label>
-            <input type="date" name="adminAction" id="Date_debut">
+            <input type="date" name="Date_debut" id="Date_debut">
             <label for="Date_fin">Date de fin :</label>
-            <input type="date" name="adminAction" id="Date_fin">
-            <input type="submit" name="adminAction" value="Voir mon graphique" id="affgraph">
+            <input type="date" name="Date_fin" id="Date_fin">
+            <input type="submit" name="action" value="Voir mon graphique" id="affgraph">
             <div id="piechart" style="width: 900px; height: 500px;"></div>
         </form>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
