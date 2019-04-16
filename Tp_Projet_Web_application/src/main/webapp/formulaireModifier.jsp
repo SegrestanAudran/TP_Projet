@@ -36,31 +36,32 @@
                 <label for="quantity" style="font-weight: bold;">Nombre de produit :</label>
                 <!--<input type="text" name="quantity" value=${Order.getQuantite()} ><br><br>-->
                 <SELECT name="quantity" size="1">
-                    <% for (int i = 1; i <= 150; i++) {%>
-                    <option name="quantity"
-                            <c:if test = "${Order.getQuantite() == i}">
-                                selected="selected"
-                            </c:if>
-                            ><%out.print(i); %></option>
-                    <% }%>
-                </SELECT><br>
-                <label for="name_company" style="font-weight: bold;">Choisir la compagnie :</label>
-                <select  name="name_company" id="name_company">
-                    <c:forEach var="Pr" items="${compagnie}" >
-                        <option name="produit"
-                                <c:if test = "${Order.getCompagnie() == Pr}">
+                    <c:forEach var="i" begin="1" end="150" step="1">
+                        <option name="quantity"
+                                <c:if test = "${Order.getQuantite() == i}">
                                     selected="selected"
                                 </c:if>
-                                > ${Pr} </option>
+                        >${i}</option>
                     </c:forEach>
-                </select><br>
-                <label for="frais"><span style="font-weight: bold;">Le frais :</span> ${Order.getFrais()}</label><br>
-                <label for="achat"><span style="font-weight: bold;">La date d'achat :</span> ${Order.getDate_envoi()} </label><br>
-                <label for="envoi"><span style="font-weight: bold;">La date d'envoi :</span> ${Order.getDate_achat()} </label><br>
+                       
+            </SELECT><br>
+            <label for="name_company" style="font-weight: bold;">Choisir la compagnie :</label>
+            <select  name="name_company" id="name_company">
+                <c:forEach var="Pr" items="${compagnie}" >
+                    <option name="produit"
+                            <c:if test = "${Order.getCompagnie() == Pr}">
+                                selected="selected"
+                            </c:if>
+                            > ${Pr} </option>
+                </c:forEach>
+            </select><br>
+            <label for="frais"><span style="font-weight: bold;">Le frais :</span> ${Order.getFrais()}</label><br>
+            <label for="achat"><span style="font-weight: bold;">La date d'achat :</span> ${Order.getDate_envoi()} </label><br>
+            <label for="envoi"><span style="font-weight: bold;">La date d'envoi :</span> ${Order.getDate_achat()} </label><br>
 
-                <input type="submit" name="action" value="Modifier ma commande" class="btn btn-dark">
-            </fieldset>
-        </form>
-    </body>
+            <input type="submit" name="action" value="Modifier ma commande" class="btn btn-dark">
+        </fieldset>
+    </form>
+</body>
 </html>
 

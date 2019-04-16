@@ -46,10 +46,6 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException, SQLException, DAOException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         RequestDispatcher dispatcher = request.getRequestDispatcher("PageAdministrateur.jsp");
-        System.out.println(request.getParameter("choixSelect"));
-        System.out.println(request.getParameter("Date_debut"));
-        System.out.println(request.getParameter("Date_fin"));
-        //System.out.println(dao.CAParCategorie(request.getParameter("Date_debut"), request.getParameter("Date_fin")));
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
         if (null != action) {
@@ -66,19 +62,18 @@ public class AdminController extends HttpServlet {
     private void AfficherGraph(HttpServletRequest request, HttpServletResponse response) throws DAOException, IOException, SQLException, ServletException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         HttpSession session = request.getSession(false);
+        //on récupère les données présent dans les input
         String cat = request.getParameter("choixSelect");
         String datd = request.getParameter("Date_debut");
         String datf = request.getParameter("Date_fin");
+        //On définit quel graphique afficher dans la session pour le servlet d'affichage
         if ("Categorie".equals(cat)) {
-            System.out.println(dao.CAParCategorie(datd, datf));
             session.setAttribute("CA", dao.CAParCategorie(datd, datf));
         }
         if ("Client".equals(cat)) {
-            System.out.println(dao.CAParCategorie(datd, datf));
             session.setAttribute("CA", dao.CAParCustomer(datd, datf));
         }
         if ("Zone Geographique".equals(cat)) {
-            System.out.println(dao.CAParCategorie(datd, datf));
             session.setAttribute("CA", dao.CAParState(datd, datf));
         }
         

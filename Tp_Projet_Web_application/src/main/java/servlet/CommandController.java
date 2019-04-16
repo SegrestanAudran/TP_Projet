@@ -53,15 +53,11 @@ public class CommandController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException, SQLException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("PageCommande.jsp");
-        //HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
-        String action = request.getParameter("action");
+        String action = request.getParameter("action"); // permet de récupérer l'action effectuer sur la page
+        //Initialise les données des listes déroulantes dans des attributs
         request.setAttribute("Prod", dao.mesproduits());
-        //  System.out.println("Coucou1");
         request.setAttribute("Company", dao.listeCompany());
-        //  System.out.println("Coucou2");
-        //  request.setAttribute("order", dao.selectPurchaseOrder());
-        //System.out.print(dao.purchaseOrderPourUnClient(1).size());
         if (null != action) {
             switch (action) {
                 case "Ajouter une commande":
@@ -93,7 +89,7 @@ public class CommandController extends HttpServlet {
         }
         dispatcher.forward(request, response);
     }
-
+    //Déconnexion
     private void doLogout(HttpServletRequest request) {
         // On termine la session
         HttpSession session = request.getSession(false);
@@ -101,7 +97,7 @@ public class CommandController extends HttpServlet {
             session.invalidate();
         }
     }
-
+    //Iniatilise la page de commande
     private void AjouterCommandeForm(HttpServletRequest request, HttpServletResponse response) throws DAOException, ServletException, IOException, SQLException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         HttpSession session = request.getSession(false);
@@ -119,47 +115,36 @@ public class CommandController extends HttpServlet {
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }
-
+    //Initialise la page de modification
     public void ModifierCommandeForm(HttpServletRequest request) throws DAOException, SQLException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         int o = Integer.valueOf(request.getParameter("Order_num"));
-
         OrderEntity Order = dao.selectPurchaseOrder(o);
         String name_product = dao.selectNameProduit(o);
-        System.out.println("cousou");
-        System.out.println(name_product);
         request.setAttribute("Order", Order);
         request.setAttribute("name_product", name_product);
         request.setAttribute("compagnie", dao.listeCompany());
 
     }
-
+    // Valide les modification sur la page modification pour la récupérer sur la page commande
     private void ModifierCommande(HttpServletRequest request, HttpServletResponse response) throws DAOException, SQLException {
-        System.out.println("debut");
-
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         int o = Integer.valueOf(request.getParameter("Order_num"));
-        System.out.println("voici la valeur" + o);
         OrderEntity Order = dao.selectPurchaseOrder(o);
         Double frais = 10 + (Double) (Math.random() * ((200 - 100) + 1));;
-        System.out.println("milieu");
         OrderEntity or = new OrderEntity(o, Order.getId_client(), Order.getId_produit(), Integer.parseInt(request.getParameter("quantity")), frais, Order.getDate_achat(), Order.getDate_envoi(), request.getParameter("name_company"));
-        System.out.println(o);
-
         dao.modifierPurchaseOrder(or);
-        System.out.println(dao.modifierPurchaseOrder(or));
         HttpSession session = request.getSession(false);
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
 
     }
-
+    //Supprime une commande et récupère la nouvelle liste de commande
     private void SupprimerCommande(HttpServletRequest request) throws DAOException, SQLException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         int o = Integer.valueOf(request.getParameter("Order_num"));
         dao.deletePurchaseOrder(o);
         HttpSession session = request.getSession(false);
         request.setAttribute("Commande", dao.purchaseOrderPourUnClient((int) session.getAttribute("id")));
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

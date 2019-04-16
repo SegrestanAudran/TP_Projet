@@ -54,7 +54,6 @@ public class LoginController extends HttpServlet {
         // Est-ce que l'utilisateur est connecté ?
         // On cherche l'attribut userName dans la session
         String userName = findUserInSession(request);
-        System.out.print(userName);
         String jspView;
         if (null == userName) { // L'utilisateur n'est pas connecté
             // On choisit la page de login
@@ -86,11 +85,9 @@ public class LoginController extends HttpServlet {
         String loginUser;
         String passwordUser;
         String userName;
-        //System.out.print("Coucou ici");
         if ((loginAdmin.equals(loginParam) && (passwordAdmin.equals(passwordParam)))) {
             // On a trouvé la combinaison login / password
             // On stocke l'information dans la session
-            //System.out.print("Coucou là encore");
             HttpSession session = request.getSession(true); // démarre la session
             session.setAttribute("userName", adminName);
         }

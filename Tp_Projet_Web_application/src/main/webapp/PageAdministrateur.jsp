@@ -4,6 +4,9 @@
     Author     : Yasmina
 --%>
 
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDate"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -36,9 +39,9 @@
                 <option id='3'>Client</option>
             </select><br>
             <label for="Date_debut">Date de début :</label>
-            <input type="date" name="Date_debut" id="Date_debut">
+            <input type="date" name="Date_debut" id="Date_debut" value="2011-01-01">
             <label for="Date_fin">Date de fin :</label>
-            <input type="date" name="Date_fin" id="Date_fin">
+            <input type="date" name="Date_fin" id="Date_fin" value=${today} >
             <input type="submit" name="action" value="Voir mon graphique" id="affgraph">
             </fieldset>
             <div id="piechart" style="width: 900px; height: 500px;"></div>
@@ -47,7 +50,7 @@
         <!-- On charge l'API Google -->
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
-
+            document.getElementById('Date_fin').value = new Date().toISOString().slice(0, 10);
             google.load("visualization", "1", {packages: ["corechart"]});
 
             // Après le chargement de la page, on fait l'appel AJAX

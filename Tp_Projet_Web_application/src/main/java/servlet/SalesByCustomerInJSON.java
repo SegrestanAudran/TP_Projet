@@ -49,6 +49,7 @@ public class SalesByCustomerInJSON extends HttpServlet {
         // Créér le DAO avec sa source de données
         DAO dao = new DAO(DataSourceFactory.getDataSource());
         HttpSession session = request.getSession(false);
+        // On récupère par défaut la date d'aujourd'huiet une date éloigné dans le temps pour permettre au graphique de se charger à la première connexion même si aucun input n'est donné
         DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate l = LocalDate.now();
         String today = dt.format(l);
